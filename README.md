@@ -18,6 +18,7 @@ Open `index.html` in a modern browser. The dashboard and question ranking run lo
 - See out-of-band conditions and unobserved O₂/CO/CO₂ channels called out, with review prompts tailored to the scenario.
 - Download a source-linked mission review note as a plain-text file.
 - Get a scenario-specific, evidence-gap-ranked next-test recommendation and export a controlled one-factor-at-a-time study matrix as CSV. The matrix labels proposed levels as exploratory, separates NASA-reported ranges from proposed design choices, and requires flow to be measured before comparison.
+- Map a mission target's oxygen, pressure, gravity, and combustion family against the curated BASS-II evidence envelope; see transfer gaps and export a mission-specific research brief. Lunar challenge conditions are shown as a gap to investigate, never as a modeled fire outcome.
 
 ## Data and limits
 

@@ -200,6 +200,32 @@
   filter.addEventListener('change',render);
   lensSelect.addEventListener('change',render);
   promptButtons.forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.prompt;render();input.focus();}));
+  const transferForm=document.querySelector('#transfer-form');
+  const transferPreset=document.querySelector('#transfer-preset');
+  const transferO2=document.querySelector('#transfer-o2');
+  const transferPressure=document.querySelector('#transfer-pressure');
+  const transferGravity=document.querySelector('#transfer-gravity');
+  const transferFamily=document.querySelector('#transfer-family');
+  function assessTransfer(event){
+    if(event)event.preventDefault();
+    const o2=Number(transferO2.value),pressure=Number(transferPressure.value),gravity=Number(transferGravity.value),family=transferFamily.value;
+    const axes=[
+      ['OXYGEN',o2>=14&&o2<=21?`Within the approximate 14–21% BASS-II band (${o2}%).`:`Outside the approximate 14–21% BASS-II band (${o2}%).`,o2>=14&&o2<=21],
+      ['GRAVITY',gravity===0?'Aligned with microgravity BASS-II context.':`Target is ${gravity} g; the curated BASS-II comparison does not represent this partial/normal-gravity level.`,gravity===0],
+      ['PRESSURE',`Target ${pressure} psi; exact BASS-II pressure is not captured in this curated evidence note.`,false],
+      ['FUEL / FLAME FAMILY',family==='solid'?'Solid-material focus aligns with BASS-II; verify actual material and geometry.':'Gaseous flame selected; BASS-II solid-fuel notes do not directly cover this family.',family==='solid']
+    ];
+    const gaps=axes.filter(axis=>!axis[2]);
+    document.querySelector('#transfer-title').textContent=gaps.length?`${gaps.length} transfer gap${gaps.length===1?'':'s'} to resolve`:'Conditions overlap the curated BASS-II context';
+    document.querySelector('#transfer-summary').textContent=gaps.length?`A result from this evidence set cannot be transferred directly to the selected mission case. Prioritize: ${gaps.map(axis=>axis[0].toLowerCase()).join(', ')}. Use a mission-matched test or source record before drawing conclusions.`:'This is a context overlap only, not proof of equivalent outcomes or a safety determination. Confirm the sample, flow, pressure, and measurement conditions against the original NASA run records.';
+    const list=document.querySelector('#transfer-axes');
+    list.replaceChildren(...axes.map(([label,copy,covered])=>{const row=document.createElement('div');row.className='transfer-axis';const head=document.createElement('div');const strong=document.createElement('strong');strong.textContent=label;const state=document.createElement('span');state.textContent=covered?'IN CONTEXT':'EVIDENCE GAP';state.className=covered?'axis-covered':'axis-gap';head.append(strong,state);const p=document.createElement('p');p.textContent=copy;row.append(head,p);return row;}));
+    document.querySelector('#download-transfer').onclick=()=>{const brief=`FIRELINE ATLAS — MISSION EVIDENCE TRANSFER BRIEF\n\nTarget: ${transferPreset.options[transferPreset.selectedIndex].text}\nOxygen: ${o2}%\nPressure: ${pressure} psi\nGravity: ${gravity} g\nEvidence family: ${family==='solid'?'solid material':'gaseous flame'}\n\n${document.querySelector('#transfer-summary').textContent}\n\nAXIS REVIEW\n${axes.map(([label,copy,covered])=>`${label} — ${covered?'IN CONTEXT':'GAP'}: ${copy}`).join('\n')}\n\nRESEARCH PRIORITY\nFind run-level NASA metadata and/or conduct a qualified, mission-matched study that isolates the uncovered axes. Measure pressure, oxygen, gravity, flow, fuel geometry, and synchronized combustion products. Partial-gravity transfer requires validation; do not interpolate these notes into a fire prediction.\n\nSource context: NASA Space Apps 2026 Flame in Freefall challenge brief; curated BASS-II summary NASA/TM-20210011385.\nhttps://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/\nhttps://ntrs.nasa.gov/citations/20210011385\n`;
+      const url=URL.createObjectURL(new Blob([brief],{type:'text/plain;charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download='fireline-mission-transfer-gap-brief.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+  }
+  transferPreset.addEventListener('change',()=>{const preset=transferPreset.value;if(preset==='lunar'){transferO2.value='30';transferPressure.value='10.2';transferGravity.value='0.16';}else if(preset==='mars'){transferGravity.value='0.38';}else if(preset==='iss'){transferO2.value='21';transferGravity.value='0';}assessTransfer();});
+  transferForm.addEventListener('submit',assessTransfer);
+  assessTransfer();
   document.querySelector('#evidence-count').textContent=String(evidence.length).padStart(2,'0');
   render();
 })();

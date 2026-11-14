@@ -81,9 +81,26 @@
       </div>
     </section>
 
+    <section id="transfer" class="section-block transfer-section">
+      <div class="section-heading"><div><p class="eyebrow">02 <span>/</span> MISSION TRANSFER GAP MAP</p><h2>Does the evidence travel to this habitat?</h2></div><span class="section-aside">TRANSFER CHECK · NOT A FIRE MODEL</span></div>
+      <p class="transfer-intro">A lunar habitat can combine lower gravity, reduced pressure, and higher oxygen. This explorer checks whether the curated BASS-II solid-fuel evidence covers those conditions—and identifies where a mission-specific conclusion would outrun the data.</p>
+      <div class="transfer-layout">
+        <form id="transfer-form" class="transfer-form">
+          <label>MISSION ENVIRONMENT<select id="transfer-preset"><option value="custom">Custom conditions</option><option value="lunar">Lunar habitat / pressurized rover · challenge reference</option><option value="mars">Mars surface habitat · set local assumptions</option><option value="iss">ISS / spacecraft reference</option></select></label>
+          <label>OXYGEN CONCENTRATION (%)<input id="transfer-o2" type="number" min="1" max="100" step="0.5" value="30"></label>
+          <label>TOTAL PRESSURE (psi)<input id="transfer-pressure" type="number" min="0.1" max="30" step="0.1" value="10.2"></label>
+          <label>GRAVITY ENVIRONMENT<select id="transfer-gravity"><option value="0.16">Lunar surface · 0.16 g</option><option value="0.38">Mars surface · 0.38 g</option><option value="0">Microgravity · ~0 g</option><option value="1">Earth · 1 g</option></select></label>
+          <label>COMBUSTION EVIDENCE OF INTEREST<select id="transfer-family"><option value="solid">Solid material / habitat fire</option><option value="gas">Gaseous flame / CFI-G context</option></select></label>
+          <button class="button button-primary" type="submit">Map the evidence gap <span aria-hidden="true">↗</span></button>
+        </form>
+        <article class="transfer-result" aria-live="polite"><span class="lens-label">TRANSFER ASSESSMENT</span><h3 id="transfer-title">Evidence gap detected</h3><p id="transfer-summary"></p><div id="transfer-axes" class="transfer-axes"></div><a href="https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/" target="_blank" rel="noreferrer">Challenge brief: lunar atmosphere and partial-gravity context ↗</a><button type="button" class="download-button" id="download-transfer">Export mission gap brief ↓</button></article>
+      </div>
+      <p class="transfer-disclaimer">This is a research-transfer coverage check, not material qualification. Challenge background cites a lunar habitat oxygen concentration of 30% or greater and pressure of 10.2 psi or less; the curated BASS-II notes do not establish safety at those conditions. CFI-G gaseous-flame findings are a different experiment family from solid-material fire tests.</p>
+    </section>
+
     <section id="ask" class="section-block intelligence-section">
       <div class="section-heading">
-        <div><p class="eyebrow">02 <span>/</span> ASK THE EVIDENCE</p><h2>What does the research actually say?</h2></div>
+        <div><p class="eyebrow">03 <span>/</span> ASK THE EVIDENCE</p><h2>What does the research actually say?</h2></div>
         <span class="section-aside">SOURCE-RANKED · EXPLAINABLE</span>
       </div>
       <div class="question-panel">
@@ -117,7 +134,7 @@
 
     <section class="section-block compare-section">
       <div class="section-heading">
-        <div><p class="eyebrow">03 <span>/</span> A COUNTERINTUITIVE SIGNAL</p><h2>More watts. Less damage.</h2></div>
+        <div><p class="eyebrow">04 <span>/</span> A COUNTERINTUITIVE SIGNAL</p><h2>More watts. Less damage.</h2></div>
         <p class="section-intro">Two reported BASS-II cases challenge a single-number safety shortcut. The values are approximate report findings, not a new threshold model.</p>
       </div>
       <div class="compare-grid">
@@ -144,7 +161,7 @@
 
     <section class="section-block evidence-section">
       <div class="section-heading">
-        <div><p class="eyebrow">04 <span>/</span> EVIDENCE LIBRARY</p><h2>Findings you can follow back.</h2></div>
+        <div><p class="eyebrow">05 <span>/</span> EVIDENCE LIBRARY</p><h2>Findings you can follow back.</h2></div>
         <div class="filter-wrap"><label for="evidence-filter">FILTER</label><select id="evidence-filter"><option value="all">All findings</option><option value="fire-load">Fire growth</option><option value="atmosphere">Atmosphere</option><option value="materials">Materials & flow</option><option value="monitoring">Monitoring</option><option value="data">NASA data access</option></select></div>
       </div>
       <div class="evidence-toolbar"><span id="evidence-results-label">08 EVIDENCE NOTES</span><span>Sorted by relevance to your question</span></div>
@@ -154,7 +171,7 @@
 
     <section id="method" class="section-block method-section">
       <div class="section-heading">
-        <div><p class="eyebrow">05 <span>/</span> HOW THE SI WORKS</p><h2>Intelligence you can inspect.</h2></div>
+        <div><p class="eyebrow">06 <span>/</span> HOW THE SI WORKS</p><h2>Intelligence you can inspect.</h2></div>
         <span class="section-aside">NO BLACK-BOX RISK SCORE</span>
       </div>
       <div class="method-grid">
