@@ -16,6 +16,7 @@
     const cite=make('a','NASA PSI-25 · source record ↗');cite.href=dataset.meta.source;cite.target='_blank';cite.rel='noreferrer';panel.append(cite);
   }
   function plot(){
+    window.renderOutcomeMap(visible,numeric,fields.o2,detail);
     const svg=$('data-plot'),ns='http://www.w3.org/2000/svg';svg.replaceChildren();
     const add=(tag,attributes,text)=>{const e=document.createElementNS(ns,tag);Object.entries(attributes).forEach(([k,v])=>e.setAttribute(k,v));if(text)e.textContent=text;svg.append(e);return e;};
     const points=visible.map(record=>({record,x:numeric(record.raw[fields.o2]),y:numeric(record.raw[fields.co])})).filter(p=>p.x!==null&&p.y!==null);
@@ -28,7 +29,7 @@
   }
   function render(){
     const min=numeric($('data-min').value),max=numeric($('data-max').value),pi=$('data-pi').value,query=$('data-query').value.trim().toLowerCase();
-    if(min!==null&&max!==null&&min>max){$('data-summary').textContent='Minimum oxygen must be no greater than maximum oxygen.';$('data-export').disabled=true;return;}
+    if(min!==null&&max!==null&&min>max){window.renderOutcomeMap([],numeric,fields.o2,detail);$('data-summary').textContent='Minimum oxygen must be no greater than maximum oxygen.';$('data-export').disabled=true;return;}
     visible=records.filter(({raw})=>{const oxygen=numeric(raw[fields.o2]);return (pi==='all'||raw.PI===pi)&&(!query||`${raw['Test #']} ${raw['Fuel Sample Material']} ${raw['Sample #']}`.toLowerCase().includes(query))&&(min===null||oxygen!==null&&oxygen>=min)&&(max===null||oxygen!==null&&oxygen<=max);});
     const quality={numeric:0,missing:0,censored:0,status:0};visible.forEach(({raw})=>quality[kind(raw[fields.co])]++);
     $('data-summary').replaceChildren(...[[visible.length,'SOURCE RECORDS'],[quality.numeric,'EXACT FINAL CO'],[quality.censored,'CENSORED FINAL CO'],[quality.missing+quality.status,'MISSING / STATUS CO']].map(([value,label])=>{const box=make('div');box.append(make('strong',String(value)),make('span',label));return box;}));

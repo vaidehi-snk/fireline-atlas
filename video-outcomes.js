@@ -7,10 +7,9 @@
   const num = value => (value === undefined || value === '' ? null : Number(value));
   const entry = raw => video.tests[String(raw['Test #']).trim()];
   const labels = {
-    'flame went out in view, confirmed by radiometer': ['Went out · radiometer agrees', 'ok'],
-    'flame went out in view': ['Went out in view', 'plain'],
-    'visible flame lost; radiometer says still burning': ['Faded from camera · still radiating', 'warn'],
-    'still burning at clip end': ['Still burning at clip end', 'plain'],
+    'camera loss with radiometer drop': ['Camera signal lost · radiometer dropped', 'ok'],
+    'visible near observation end': ['Visible near last usable frame', 'plain'],
+    'inconclusive': ['Inconclusive', 'warn'],
     'no sustained flame detected': ['No sustained flame seen', 'plain'],
     'no readable video': ['NASA video file unreadable', 'bad'],
     'no experiment footage recognised': ['No experiment footage', 'bad'],
@@ -26,13 +25,12 @@
   function chart(v) {
     const ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg');
     svg.setAttribute('viewBox', '0 0 360 150'); svg.setAttribute('class', 'video-chart'); svg.setAttribute('role', 'img');
-    svg.setAttribute('aria-label', `Flame size seen by the video and radiometer reading over ${v.trace.t.at(-1)} seconds`);
+    svg.setAttribute('aria-label', `Flame size seen by the video and radiometer reading over ${v.trace.t.at(-1) ?? 0} seconds`);
     const add = (tag, attrs, text) => { const e = document.createElementNS(ns, tag); Object.entries(attrs).forEach(([k, val]) => e.setAttribute(k, val)); if (text) e.textContent = text; svg.append(e); return e; };
     const { t, area, rad } = v.trace, end = t.at(-1) || 1, x = s => 30 + s / end * 320, y = f => 118 - f * 100;
     const sorted = [...area].sort((a, b) => a - b), top = sorted[Math.floor(sorted.length * 0.95)] || 1;
     const rads = rad.filter(r => r !== null), rmin = Math.min(...rads), rmax = Math.max(...rads);
-    if (num(v.flame_start_s) !== null) add('rect', { x: x(num(v.flame_start_s)), y: 14, width: Math.max(1, x(num(v.flame_end_s)) - x(num(v.flame_start_s))), height: 104, fill: '#ffbd6818' });
-    const line = (values, scale, attrs) => { let d = '', on = false; values.forEach((val, i) => { if (val === null) { on = false; return; } d += `${on ? 'L' : 'M'}${x(t[i]).toFixed(1)} ${y(Math.min(1, scale(val))).toFixed(1)} `; on = true; }); add('path', { d, fill: 'none', ...attrs }); };
+    const line = (values, scale, attrs) => { let d = '', on = false; values.forEach((val, i) => { if (i && t[i] - t[i - 1] > 1) on = false; if (val === null) { on = false; return; } d += `${on ? 'L' : 'M'}${x(t[i]).toFixed(1)} ${y(Math.min(1, scale(val))).toFixed(1)} `; on = true; }); add('path', { d, fill: 'none', ...attrs }); };
     line(area, a => a / top, { stroke: '#ffbd68', 'stroke-width': 2 });
     if (rads.length && rmax > rmin) line(rad, r => (r - rmin) / (rmax - rmin), { stroke: '#80d8cc', 'stroke-width': 1.5, 'stroke-dasharray': '4 3' });
     if (num(v.rad_end_s) !== null) add('line', { x1: x(num(v.rad_end_s)), x2: x(num(v.rad_end_s)), y1: 14, y2: 118, stroke: '#80d8cc', 'stroke-width': 1 });
@@ -40,14 +38,14 @@
     add('text', { x: 30, y: 10, fill: '#ffbd68', 'font-size': 10 }, 'flame seen by camera');
     add('text', { x: 150, y: 10, fill: '#80d8cc', 'font-size': 10 }, '- - radiometer');
     add('text', { x: 30, y: 134, fill: '#8fa99d', 'font-size': 10 }, '0 s');
-    add('text', { x: 350, y: 134, 'text-anchor': 'end', fill: '#8fa99d', 'font-size': 10 }, `${end} s of flight video`);
+    add('text', { x: 350, y: 134, 'text-anchor': 'end', fill: '#8fa99d', 'font-size': 10 }, `${end} s (video time)`);
     return svg;
   }
 
   const summary = document.getElementById('data-summary');
   if (summary) {
     const all = Object.values(video.tests), count = test => all.filter(test).length;
-    const line = make('p', `Flight video read for ${count(v => v.trace)} of 129 tests: ${count(v => v.status === 'flame went out in view, confirmed by radiometer')} extinctions confirmed by the radiometer, ${count(v => v.status === 'visible flame lost; radiometer says still burning')} where the camera loses a dim flame that the radiometer still sees, ${count(v => v.review)} flagged for review in total, ${count(v => v.status === 'no readable video')} NASA main clips that do not open. Select a test to see its flight video panel.`, 'video-summary');
+    const line = make('p', `Flight video measured for ${count(v => v.trace)} of 129 tests. Select a record to inspect the optical measurements and radiometer readings.`, 'video-summary');
     summary.after(line);
   }
 
@@ -60,8 +58,11 @@
     box.append(make('strong', text, `video-badge video-${tone}`));
     const facts = make('dl');
     const fact = (k, val) => { if (val) facts.append(make('dt', k), make('dd', val)); };
-    if (num(v.flame_start_s) !== null) fact('Visible flame', `${v.flame_start_s} s → ${v.flame_end_s} s of the clip (${v.flame_s} s)` + (v.clock_at_flame_end ? ` · BASS clock ${v.clock_at_flame_start}–${v.clock_at_flame_end}` : ''));
-    if (v.radiometer_check) fact('Radiometer', v.radiometer_check === 'agrees' ? `agrees: radiation falls ${v.rad_vs_video_s} s after the camera loses the flame` : v.radiometer_check === 'no clear rise' ? 'no clear rise above baseline' : `${v.radiometer_check} (${v.rad_vs_video_s > 0 ? '+' : ''}${v.rad_vs_video_s} s)`);
+    if (num(v.flame_start_s) !== null) {
+      fact('First and last detections', `${v.flame_start_s}–${v.flame_end_s} s · ${v.span_s} s elapsed`);
+      fact('Detected periods', `${v.flame_s} s across ${v.flame_periods} period(s), allowing brief flicker`);
+    }
+    if (v.radiometer_check) fact('Radiometer', v.radiometer_check === 'agrees' ? `Below half-level at ${v.rad_end_s} s. Crossing bracket within 6 s of camera loss.` : v.radiometer_check);
     if (v.fan_at_flame_end !== undefined) fact('Fan display', `${v.fan_at_flame_start} at flame start → ${v.fan_at_flame_end} at flame end`);
     if (v.left_edge_px_s !== undefined) fact('Flame edge drift', `left ${v.left_edge_px_s} px/s · right ${v.right_edge_px_s} px/s (image pixels, uncalibrated)`);
     fact('Note', v.note);

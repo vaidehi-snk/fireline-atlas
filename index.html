@@ -18,6 +18,7 @@
   <script defer src="./workspace.js"></script>
   <script defer src="./video-data.js"></script>
   <script defer src="./video-outcomes.js"></script>
+  <script defer src="./outcome-map.js"></script>
   <script defer src="./experiment-data.js"></script>
   <link rel="stylesheet" href="./experiment-data.css">
 </head>
@@ -129,6 +130,15 @@
       <div class="section-heading"><div><p class="eyebrow">NASA PSI-25 / ORIGINAL EXPERIMENT RECORDS</p><h2>Explore 129 documented BASS-II tests.</h2></div><a class="data-doi" href="https://doi.org/10.60555/4qc4-de67" target="_blank" rel="noreferrer">DOI: 10.60555/4qc4-de67 ↗</a></div>
       <p class="data-intro">Inspect NASA's experimental table, filter comparable records, and preserve the values the instruments actually recorded—including missing values and non-numeric status entries. This is a descriptive view of heterogeneous tests.</p>
       <form id="data-filters" class="data-filters"><label>INVESTIGATOR<select id="data-pi"><option value="all">All investigators</option></select></label><label>MATERIAL OR TEST SEARCH<input id="data-query" type="search" placeholder="e.g. PMMA, fabric, B3"></label><label>INITIAL O₂ MIN (%)<input id="data-min" type="number" step="0.1" value="13.6"></label><label>INITIAL O₂ MAX (%)<input id="data-max" type="number" step="0.1" value="22.2"></label><button class="download-button" type="button" id="data-reset">Reset filters</button></form>
+      <article class="data-plot-panel outcome-map-panel">
+        <h3>Flight outcomes by oxygen and airflow</h3>
+        <p id="map-count" aria-live="polite"></p>
+        <svg id="outcome-map" viewBox="0 0 630 255" role="img" aria-label="BASS-II flight test outcomes by initial oxygen and recorded duct airflow. Select a test below for its exact values."></svg>
+        <p class="map-legend"><span style="color:#80d8cc">● Camera loss + sensor drop</span> <span style="color:#ffa967">● Visible near observation end</span> <span style="color:#c79bf4">● Inconclusive</span> <span style="color:#98a4ac">● Unmeasured</span></p>
+        <label>Inspect a plotted test <select id="map-test"></select></label>
+        <p>The line marks the challenge’s 30% lunar oxygen scenario. Lunar airflow is unspecified. Blank space indicates no plotted record in this selection. NASA’s duct display takes about one minute to respond. Each point uses a recorded test setting, and the flame can change as airflow varies during the clip.</p>
+        <a href="./data/BASS-II_ReadMe.docx" download>NASA’s instrument notes</a> · <a href="./data/video-outcomes.csv" download>Download derived observations</a>
+      </article>
       <div id="data-summary" class="data-summary" role="status"></div><div class="data-layout"><article class="data-plot-panel"><h3>Initial oxygen vs. final CO</h3><svg id="data-plot" viewBox="0 0 640 300" role="img" aria-label="Descriptive scatter plot of initial oxygen percentage and exact numeric final carbon monoxide readings"></svg><p id="data-quality"></p><p>Only exact numeric final CO readings are plotted. Initial concentrations, fuel, geometry, and flow vary between records; this plot does not establish causation or a universal threshold. Final CO is an endpoint reading, not necessarily the peak.</p></article><article id="data-detail" class="data-detail" aria-live="polite"></article></div>
       <div class="data-table-wrap" tabindex="0" aria-label="Experiment table; scroll horizontally to view all columns"><table class="data-table"><caption>Filtered source records · select a test to inspect all 17 original fields</caption><thead><tr><th scope="col">Test</th><th scope="col">Investigator</th><th scope="col">Material</th><th scope="col">Initial O₂ %</th><th scope="col">Final O₂ %</th><th scope="col">Initial CO ppm</th><th scope="col">Final CO ppm</th><th scope="col">Record note</th><th scope="col">Flight video</th></tr></thead><tbody id="data-rows"></tbody></table></div>
       <div class="data-export"><button id="data-export" type="button" class="download-button">Export filtered records + provenance ↓</button><a href="./data/PSI-25_Experimental-table_BASS-II.csv" download>Download unchanged NASA CSV</a></div><p class="data-provenance">Source file: PSI-25_Experimental table_BASS-II.csv · file version 1 · CC0-1.0 · retrieved 2026-11-14. All source values remain intact. The recorded initial O₂ envelope is 13.6–22.2%; it is broader than the report's approximate 14–21% overview and spans different test configurations.</p>

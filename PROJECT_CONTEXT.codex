@@ -1,6 +1,6 @@
 # Fireline Atlas — complete project handoff
 
-Updated: 2026-11-14. This is the current project state; it replaces the earlier handoff with superseded feature and validation descriptions.
+Updated: 2026-11-15. This is the current project state; it replaces the earlier handoff with superseded feature and validation descriptions.
 
 ## Start here
 
@@ -13,34 +13,15 @@ Open `index.html` in Chrome or another modern browser. No server, runtime packag
 
 The user wants a functioning, scientifically defensible, competitive submission, and prefers concrete progress with concise communication. On the latest turn the user explicitly asked to add this updated handoff to GitHub too. **This file is now part of the repository and must be kept updated and pushed with future changes.** Use Git log/status to establish the current code revision rather than relying on an old chat claim.
 
-## Latest work: flight video outcomes (14 Nov evening, teammate's session)
+## Latest work · 15 November 2026
 
-Agreed direction: read NASA's BASS-II flight videos and turn them into the burn outcomes the experimental table lacks. This is the first of two agreed features; the second is the **results map** (outcomes plotted by oxygen and airflow, with ISS and lunar conditions marked), not started yet.
+NASA Evidence now joins NASA PSI-25’s original 129-row table to 65 partner-generated flight traces by test ID. Open the oxygen–airflow map, choose B1, then inspect the flight panel, source filename/hash and all 17 original fields. The oxygen reference at 30% represents the challenge scenario. Airflow is unspecified for that scenario. The map accepts a single numeric Air display value in cm/s, never fan settings, ranges or notes. NASA documents approximately one minute of response lag. Of 129 tests, 25 have plottable coordinates, 20 of those have traces, and 5 are unmeasured. Coincident tests share coordinates and can each be selected by ID.
 
-What exists now:
-- `scripts/video_outcomes.py` — one script, five commands: `index` (maps NASA's 296 BASS-II MP4s to table tests via the public PSI API → `data/video-index.json`), `fetch` (downloads clips into git-ignored `work/videos/`), `measure` (per-frame trace per test → `data/video-traces/<test>.csv` + `<test>.json` provenance), `outcomes` (rebuilds `data/video-outcomes.csv` and `video-data.js` from saved traces, no video needed), `glyphs` (one-off: built `data/overlay-glyphs.json`).
-- Per frame (4 fps): flame pixels = brightest channel exceeds the clip's per-pixel minimum by 40/255, below the on-screen overlay. Frames without the BASS overlay (camera playback spliced onto some clips) are excluded, and so are frames with the work lights on (a large grey area; flames and the igniter glow are strongly coloured).
-- The overlay is read on every frame by template matching (65 labelled character shapes from B1; grid and ~1 % width differences located per clip): FUEL, AIR, FAN, RAD (radiometer) and the BASS clock. Each field accepts only the characters it can contain, a match must beat every other character by 8 px, and specks smaller than the smallest glyph count as blank. Unreadable characters make the field blank, never a guess.
-- Per test: visible flame start/end/duration, flicker-tolerant flame periods, extinction-time sensitivity at thresholds 30/40/50, left/right image-edge drift (px/s, Theil-Sen), fan display at flame start/end, BASS clock at start/end, and an **independent radiometer check** (does radiation fall within 6 s of the camera losing the flame?).
-- Status values: `flame went out in view, confirmed by radiometer`, `visible flame lost; radiometer says still burning` (review), `flame went out in view`, `still burning at clip end`, `no sustained flame detected`, `no readable video`.
-- UI: NASA Evidence table has a "Flight video" column; the record detail panel shows a Flight video block (status, times, radiometer, fan, edge drift, chart of camera flame size vs radiometer). Files: `video-data.js` (generated), `video-outcomes.js`, two hooks in `experiment-data.js`, styles appended to `experiment-data.css`.
-- Check: `python checks/video_outcomes_check.py` (synthetic flame periods, radiometer logic, template self-consistency, dataset/bundle integrity, B1 reference values).
+The partner mapped the original NASA MP4 archive with scripts/video_outcomes.py. Per-frame CSVs retain image brightness, bounding boxes, threshold sensitivity and digitized instrument readings sampled at 4 Hz. Each trace has a source filename, version and SHA-256. Run python scripts/video_outcomes.py outcomes to rebuild the CSV and browser bundle from committed traces (NumPy required). Original video extraction also requires ffmpeg/ffprobe. Raw clips are outside the repository. Three indexed files could not be decoded by the partner. Additional clips and ambiguous file matches await review.
 
-Current coverage (14 Nov): 72 tests downloaded (Bhattacharjee, Ferkul, T'ien, Olson; Miller and Fernandez-Pello not yet, ~4.7 GB). 65 main clips measured: 25 flame went out with the radiometer agreeing, 30 camera lost a dim flame while the radiometer shows burning (review), 5 went out without radiometer confirmation (4 flagged), 5 still burning at clip end. 3 NASA main clips unreadable, 3 tests have no main clip, 1 has two.
+The revised classification yields 24 camera losses accompanied by a radiometer drop, 5 visible near the last usable frame, and 36 inconclusive among 65 measured clips. These are Fireline measurements. A coincident optical loss and sensor drop is evidence suitable for review, not independent proof of extinction. The crossing must be bracketed by readable high and low samples both within six seconds of the last sustained optical detection. A missing low sample is inconclusive. The optical end label has a two-second tolerance. Work-light and nonlive frames are excluded from peak/median metrics, sensor comparisons and chart bins. The chart breaks across missing seconds. Detected duration sums first-to-last sample spans within sustained periods, allowing up to one second of flicker. It is distinct from total elapsed time.
 
-Findings so far (verified by eye on contact sheets):
-- NASA's main clips for B14, B18 and B20 are truncated (B14 stops at exactly 3 MiB) and do not decode; recorded in `note`. Worth reporting to PSI. Second-view clips are never measured: those checked (B14, O17) are handheld footage of the lab monitors.
-- Several clips start or end with the work lights on (e.g. B3–B5, T5); those grey frames are excluded, so flame start times are after the lights go off.
-- T13's overlay is framed differently (~130 px left, ~1.3× wider) and is not found; its outcome is flagged for review with no radiometer check.
-- Where the flame stays bright, camera and radiometer agree: radiation falls 1–5 s after the camera loses the flame (sensor cooling).
-- Near-limit flames turn dim and blue. The camera loses them while the radiometer (and NASA's still photos spliced at the end of some clips, e.g. B22) shows burning continues. Those tests are flagged `review`, not reported as extinguished. Lowering the threshold does not fix this (dim flame ≈ 2× noise in T1); upgrade path noted in the script.
-- In several Bhattacharjee tests the flame went out while the fan display was being reduced (e.g. B1 62 → 46), so the fan reading at extinction is a flow-limit observation, not just a setting.
-
-How to continue (Vaidehi):
-1. `python scripts/video_outcomes.py outcomes` rebuilds everything from the committed traces; `python checks/video_outcomes_check.py` must pass.
-2. To add tests: `python scripts/video_outcomes.py fetch --pi Olson` (or `--all`; ~6.8 GB total, NASA's host is slow), then `measure`. Several `measure` runs on different tests can run in parallel.
-3. Tests with two clips of the same view (B15 M10 O5a O13a O16 P5 P12 P20 T3 T7) are skipped; choose the clip by hand if needed. 11 tests have no main clip (B17 F2 M3 O10 O17 O20 O21 O22 P8 P10 T20).
-4. Next feature: the results map, built from `data/video-outcomes.csv` joined to the table's initial O₂ and flow fields. Keep `review` tests visually distinct; do not convert pixels to mm without a scale.
+Regression cases: B8 and T23 have no observed low reading after the last high. T23 also has a visible signal near observation end. B7 has 54.5 s across 13 periods spanning 102.75 s. B3's work-light peak is excluded. Check with python checks/video_outcomes_check.py and the existing Node/browser checks. Limitations include unidentified overlays (particularly T13), optical threshold sensitivity, igniter glow, unsampled time and lack of independent human labels. Priorities are blinded frame annotations with disagreement reporting, resolving ambiguous matches, and recording the public submission demo.
 
 ## Challenge expectations and submission
 

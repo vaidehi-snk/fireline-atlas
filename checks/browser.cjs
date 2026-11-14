@@ -30,6 +30,18 @@ function parseCSV(text){const rows=[];let row=[],value='',quoted=false;for(let i
   await page.locator('#lab-case-record').click();await page.waitForFunction(()=>document.querySelector('#data-rows').children.length===1);
   assert.match(await page.locator('#data-rows').innerText(),/B3.*Bhattacharjee/s);pass('Image case links to its exact B3 experimental-table record');
   await page.locator('#data-reset').click();assert.equal(await page.locator('#data-rows tr').count(),129);assert.equal(await page.locator('#data-plot circle').count(),120);pass('Original-table view renders all 129 records and 120 exact numeric plot observations');
+  assert.equal(await page.locator('#outcome-map circle').count(),25);
+  assert.match(await page.locator('#map-count').innerText(),/104 lack a single numeric/);
+  await page.locator('#map-test').selectOption('B1');
+  assert.match(await page.locator('#data-detail').innerText(),/B1 · Bhattacharjee/);
+  assert.match(await page.locator('#data-detail').innerText(),/Camera signal lost · radiometer dropped/);
+  pass('Oxygen–airflow map plots 25 exact pairs and opens the matching flight observation');
+  await page.locator('#data-rows').getByRole('button',{name:'B7',exact:true}).click();
+  assert.match(await page.locator('#data-detail').innerText(),/54.5 s across 13 period/);
+  assert.match(await page.locator('#data-detail').innerText(),/102.75 s elapsed/);
+  await page.locator('#data-rows').getByRole('button',{name:'T23',exact:true}).click();
+  assert.match(await page.locator('#data-detail').innerText(),/inconclusive: no subsequent low reading/);
+  pass('Flight panel distinguishes B7 cumulative duration and T23 unresolved sensor ending');
   await page.locator('#data-query').fill('no-matching-material-xyz');assert.match(await page.locator('#data-rows').innerText(),/No records/);assert.equal(await page.locator('#data-export').isDisabled(),true);pass('Empty filters disable export and show an explicit empty state');
   await page.locator('#data-reset').click();await page.locator('#data-min').fill('23');assert.match(await page.locator('#data-summary').innerText(),/Minimum oxygen/);assert.equal(await page.locator('#data-export').isDisabled(),true);pass('Invalid oxygen filter bounds are rejected');
   await page.locator('#data-reset').click();

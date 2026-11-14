@@ -357,12 +357,19 @@ def radiometer(rows, first, last):
         return {'rad_baseline': round(base, 2), 'rad_flame_level': round(level, 2), 'radiometer_check': 'no clear rise'}
     half = base + (level - base) / 2
     above = [t for t, v in rad if t >= first + 3 and v >= half]
-    end = above[-1] if above else first
-    gap = round(end - last, 2)
-    return {'rad_baseline': round(base, 2), 'rad_flame_level': round(level, 2), 'rad_end_s': end, 'rad_vs_video_s': gap,
-            'radiometer_check': 'agrees' if -RAD_TOLERANCE <= gap <= RAD_TOLERANCE else
-                                'radiation continues after video flame ends' if gap > 0 else
-                                'radiation falls before video flame ends'}
+    levels = {'rad_baseline': round(base, 2), 'rad_flame_level': round(level, 2)}
+    if not above:
+        return {**levels, 'radiometer_check': 'no clear rise'}
+    last_high = above[-1]
+    low = next((t for t, value in rad if t > last_high and value < half), None)
+    if low is None:
+        return {**levels, 'radiometer_check': 'inconclusive: no subsequent low reading'}
+    # The crossing is bracketed by readings. Both must lie in the tolerance window.
+    gap = round(low - last, 2)
+    agrees = last - RAD_TOLERANCE <= last_high < low <= last + RAD_TOLERANCE
+    return {**levels, 'rad_end_s': low, 'rad_vs_video_s': gap,
+            'radiometer_check': 'agrees' if agrees else 'radiometer timing differs or is unresolved'}
+
 
 
 def runs(times, present):
@@ -392,12 +399,18 @@ def lights_on(r):
     return max(c) - min(c) < 0.3 * max(c)
 
 
+def usable(row):
+    return bool(row['live']) and not lights_on(row)
+
+
 def outcome(rows):
-    rows = [{**r, 'live': 0} if r['live'] and lights_on(r) else r for r in rows]
+    if not rows:
+        return {'status': 'no experiment footage recognised'}
+    rows = [r for r in rows if usable(r)]
     times = [r['t_s'] for r in rows]
     shown = [r['t_s'] for r in rows if r['live']]
     if not shown:
-        return {'status': 'no experiment footage recognised', 'clip_s': times[-1]}
+        return {'status': 'no experiment footage recognised', 'clip_s': ''}
     clip_end = shown[-1]
     def flame_runs(key):
         return runs(times, [bool(r['live']) and r[key] >= MIN_AREA for r in rows])
@@ -413,13 +426,12 @@ def outcome(rows):
     if not any(r['clock'] or r['rad'] for r in rows):  # overlay never found (e.g. T13 is framed differently)
         sensors['radiometer_check'] = 'radiation unavailable: overlay not found'
     check = sensors.get('radiometer_check', '')
-    status = ('still burning at clip end' if last >= clip_end - END_MARGIN else
-              'visible flame lost; radiometer says still burning' if check == 'radiation continues after video flame ends' else
-              'flame went out in view, confirmed by radiometer' if check == 'agrees' else
-              'flame went out in view')
+    status = ('visible near observation end' if last >= clip_end - END_MARGIN else
+              'camera loss with radiometer drop' if check == 'agrees' else 'inconclusive')
     return {**result, 'status': status,
-            'review': 'yes' if check.startswith('radiation') or not check else '',
-            'flame_start_s': first, 'flame_end_s': last, 'flame_s': round(last - first, 2),
+            'review': 'yes' if check != 'agrees' else '',
+            'flame_start_s': first, 'flame_end_s': last, 'span_s': round(last - first, 2),
+            'flame_s': round(sum(end - start for start, end in main), 2),
             'flame_end_s_range': f'{min(ends)} to {max(ends)}',
             'median_area_px': int(np.median([r['area_px'] for r in lit])),
             'median_width_px': int(np.median([r['x_max'] - r['x_min'] for r in lit])),
@@ -428,7 +440,7 @@ def outcome(rows):
 
 
 META = ['test', 'pi', 'video_view', 'video_file', 'video_version', 'video_sha256', 'note']
-COLUMNS = ['test', 'pi', 'status', 'review', 'flame_start_s', 'flame_end_s', 'flame_s', 'flame_end_s_range', 'flame_periods',
+COLUMNS = ['test', 'pi', 'status', 'review', 'flame_start_s', 'flame_end_s', 'flame_s', 'span_s', 'flame_end_s_range', 'flame_periods',
            'clip_s', 'rad_end_s', 'rad_vs_video_s', 'radiometer_check', 'rad_baseline', 'rad_flame_level',
            'left_edge_px_s', 'right_edge_px_s', 'clock_at_flame_start', 'clock_at_flame_end',
            'fan_at_flame_start', 'fan_at_flame_end', 'overlay_read', 'median_area_px', 'median_width_px', 'median_rgb',
@@ -472,12 +484,13 @@ def bundle(records):
     """video-data.js: outcomes plus 1-per-second traces for the offline browser app."""
     keep = [c for c in COLUMNS if c not in ('pi', 'sample_fps', 'delta', 'min_area_px', 'median_rgb', 'overlay_read')]
     tests = {}
-    for test, r in records.items():
+    for test in sorted(records):
+        r = records[test]
         entry = {k: r.get(k, '') for k in keep if r.get(k, '') != ''}
         if r.get('video_file') and (TRACES / f'{test}.csv').exists():
             seconds_ = {}
             for row in load_trace(test):
-                if row['live']:
+                if usable(row):
                     seconds_.setdefault(int(row['t_s']), []).append(row)
             med = lambda vals: float(np.median(vals)) if vals else None
             entry['trace'] = {'t': list(seconds_),

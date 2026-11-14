@@ -1,11 +1,13 @@
 {
-  "date": "2026-11-14T09:14:05.564Z",
+  "date": "2026-11-14T19:38:52.036Z",
   "checks": [
     "NASA B3 loads 11 real frames with explicit uncalibrated/source-time mode",
     "Frame inspection preserves original photo clock and 21-second elapsed span",
     "Measurement export retains unequal source timestamps, real-data flag, and source hash",
     "Image case links to its exact B3 experimental-table record",
     "Original-table view renders all 129 records and 120 exact numeric plot observations",
+    "Oxygen–airflow map plots 25 exact pairs and opens the matching flight observation",
+    "Flight panel distinguishes B7 cumulative duration and T23 unresolved sensor ending",
     "Empty filters disable export and show an explicit empty state",
     "Invalid oxygen filter bounds are rejected",
     "Filtered export preserves all original records, censor strings, and provenance columns",
