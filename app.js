@@ -137,6 +137,31 @@
     const sensorText = missingSensors.length
       ? `Not selected: ${missingSensors.join(', ')}. BASS-II reported O₂, CO, and CO₂ measurements; review whether these channels are available for the scenario.`
       : 'O₂, CO, and CO₂ are all selected, matching the three atmosphere channels discussed in the BASS-II report.';
+    const nextTest = !oxygenInBand
+      ? 'Highest-value next step: locate or run a matched test at this oxygen level. The curated BASS-II oxygen trend does not cover the selected value, so extrapolating it would add uncertainty.'
+      : missingSensors.length
+        ? `Highest-value next step: instrument the same configuration for ${missingSensors.join(', ')} alongside the selected channels. This closes a measurement gap before comparing fire behavior.`
+        : flow === 'unknown'
+          ? 'Highest-value next step: repeat this configuration with measured duct velocity and record it with O2, CO, and CO2. NASA reports HRR scatter across flow conditions.'
+          : !fuelCovered
+            ? 'Highest-value next step: characterize this fuel geometry under controlled conditions; no matching geometry is represented in this curated evidence set.'
+            : structuralMatch
+              ? 'Highest-value next step: recover run-level BASS-II metadata for the damage analogue—especially its specific oxygen and flow—then compare a controlled repeat with the same fuel and heat path.'
+              : 'Highest-value next step: run a paired comparison that changes one condition at a time, and preserve measured flow plus O2, CO, and CO2 so the result can be compared with NASA evidence.';
+    document.querySelector('#experiment-recommendation').textContent=nextTest;
+    document.querySelector('#download-plan').onclick=()=>{
+      const cols=['run','purpose','fuel_geometry','oxygen_percent','duration','flow_measurement','heat_path','channels_to_record','controls_and_note'];
+      const rows=[
+        ['A','Baseline for this scenario',fuelNames[fuel],oxygen,duration,'Measure actual velocity',heatPath,'O2; CO; CO2','Record ignition protocol, sample dimensions, replicate count, and synchronized time series.'],
+        ['B','Oxygen contrast; hold other conditions constant',fuelNames[fuel],'14 (proposed exploratory level)',duration,'Match A; measure actual velocity',heatPath,'O2; CO; CO2','Within approximate BASS-II study band; proposed design level, not a NASA-reported threshold.'],
+        ['C','Oxygen contrast; hold other conditions constant',fuelNames[fuel],'21 (proposed exploratory level)',duration,'Match A; measure actual velocity',heatPath,'O2; CO; CO2','Within approximate BASS-II study band; proposed design level, not a NASA-reported threshold.'],
+        ['D','Flow contrast; hold other conditions constant',fuelNames[fuel],oxygen,duration,'Set measured target after facility review; match other inputs',heatPath,'O2; CO; CO2','Define safe, facility-approved velocity levels before testing; qualitative labels are not numeric test conditions.'],
+        ['E','Geometry contrast; hold other conditions constant',fuel==='concurrent-rod'?'opposed-flow thick slab':'concurrent-flow rod',oxygen,duration,'Match A; measure actual velocity',heatPath,'O2; CO; CO2','Use documented sample geometry and replicates; exploratory comparison, not a prediction.']
+      ];
+      const esc=v=>'"'+String(v).replaceAll('"','""')+'"';
+      const csv=[cols,...rows].map(row=>row.map(esc).join(',')).join('\r\n');
+      const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download='fireline-controlled-test-matrix.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    };
     const findings = document.querySelector('#scenario-findings');
     findings.replaceChildren();
     [["OXYGEN COVERAGE",o2Text],["FLOW CONTEXT",flowText],["MONITORING VIEW",sensorText]].forEach(([label,copy])=>{

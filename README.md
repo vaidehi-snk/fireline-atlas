@@ -17,6 +17,7 @@ Open `index.html` in a modern browser. The dashboard and question ranking run lo
 - Configure a hypothetical fire scenario and match its fuel form, oxygen level, duration, and heat path against the documented BASS-II case.
 - See out-of-band conditions and unobserved O₂/CO/CO₂ channels called out, with review prompts tailored to the scenario.
 - Download a source-linked mission review note as a plain-text file.
+- Get a scenario-specific, evidence-gap-ranked next-test recommendation and export a controlled one-factor-at-a-time study matrix as CSV. The matrix labels proposed levels as exploratory, separates NASA-reported ranges from proposed design choices, and requires flow to be measured before comparison.
 
 ## Data and limits
 
