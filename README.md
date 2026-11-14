@@ -14,6 +14,7 @@ An offline-ready, source-traceable evidence dashboard for microgravity fire-safe
 | Hosted demo | Not yet deployed or verified |
 | Image analysis | Local processing, frame inspection, and CSV export implemented |
 | Verification | Real NASA B3 contact-sheet case and 13 browser checks pass; independent physical measurement accuracy remains unvalidated |
+| Flight video outcomes | NASA BASS-II flight videos read per test: visible flame window, fan and radiometer readings, radiometer cross-check |
 
 Built for [Flame in Freefall](https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/): an interactive dashboard that summarizes, ranks, and interprets microgravity combustion research for human space exploration.
 
@@ -49,6 +50,8 @@ For an optional local HTTP server, run `python -m http.server 8000` from the pro
 Images are limited to 10 MB each, 4096 pixels per side, and 12 megapixels. Confirm timing, scale, exposure, camera stability, and region selection before interpreting the extracted motion.
 
 ## What works
+
+- **Flight video outcomes:** NASA's BASS-II table records how each test was set up but not what happened. `scripts/video_outcomes.py` reads NASA's own flight videos for each test: when a visible flame starts and ends, how its image edges drift, and the on-screen FUEL / AIR / FAN / RAD readings and BASS clock. The flame radiometer is used as an independent check: where it keeps reading high after the camera loses a dim blue flame, the test is marked for review instead of reported as extinguished. Results appear as a "Flight video" column and panel in NASA Evidence, and as `data/video-outcomes.csv` with one trace per test in `data/video-traces/`. Values are in video pixels and seconds, not calibrated spread rates. See [data provenance](data/PROVENANCE.md).
 
 - **NASA experiment explorer:** 129 original BASS-II records from [PSI-25, DOI 10.60555/4qc4-de67](https://doi.org/10.60555/4qc4-de67). Filter by investigator, material/test text, and initial oxygen; inspect all 17 source fields; export selected records with DOI, file version, and source hash. The plot includes only exact numeric final CO readings. Three censored, one other status, and five missing/none entries remain visible and are never replaced with zero. NASA's readme defines `OR` as over range (>1000 ppm), so those entries are explicitly censored. See [data provenance](data/PROVENANCE.md).
 
@@ -104,6 +107,14 @@ npm install --no-save --package-lock=false playwright-core
 node checks/browser.cjs
 ```
 
+Flight video outcomes (Python 3.10+ with numpy; ffmpeg only needed to re-measure videos):
+
+```sh
+python checks/video_outcomes_check.py          # logic, overlay templates, dataset integrity
+python scripts/video_outcomes.py outcomes      # rebuild outcomes and video-data.js from saved traces
+python scripts/video_outcomes.py fetch --pi Olson && python scripts/video_outcomes.py measure   # add more tests
+```
+
 Set `FIRELINE_CHROME` if Chrome is not at the script's default Windows path. The B3 default fit is approximately **4.804 px/s, 11/11 usable frames, R² ≈ 0.998**. This verifies pipeline behavior on reproduced NASA imagery; it is not error against independent reference boundaries or a validated physical spread rate. [Example exported measurements](data/B3-analysis-example.csv) retain timing and source settings.
 
 ## Data and limits
@@ -128,6 +139,9 @@ NASA's Physical Sciences Informatics repository is the planned pathway for expan
 - `nasa-case.js`, `data/B3-case-manifest.json` — real NASA B3 preset and source timestamps/hashes
 - `data/BASS-II_B3_ProofSheet.pdf`, `data/BASS-II_ReadMe.docx` — original NASA source documents
 - `scripts/build-nasa-case.py`, `checks/nasa-case.cjs`, `checks/browser.cjs` — reproducible case preparation and verification
+- `scripts/video_outcomes.py`, `checks/video_outcomes_check.py` — flight-video index, download, measurement and outcomes, with checks
+- `data/video-index.json`, `data/video-traces/`, `data/video-outcomes.csv`, `data/overlay-glyphs.json` — derived video data and overlay templates
+- `video-data.js`, `video-outcomes.js` — generated browser bundle and the Flight video panel
 - `PROJECT_CONTEXT.codex` — complete, tracked project handoff and continuation plan
 
 ## Next technical milestones
