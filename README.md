@@ -9,6 +9,8 @@ Open `index.html` in a modern browser. The dashboard and question ranking run lo
 
 ## What works
 
+- **Flame Motion Lab:** import 2–60 local experiment images; average intensity over a selected band; track a left/right image boundary; fit motion over time; inspect threshold sensitivity and frame overlays; export CSV with source, timing, calibration, and settings. A labeled synthetic example demonstrates the method. No NASA image sequence is bundled and no NASA measurement accuracy is claimed.
+
 - Search a mission question and rank curated findings by topic match, source tier, and mission lens.
 - Switch between habitat, suppression, and material-screening lenses.
 - Filter findings by fire load, atmosphere, materials, monitoring, or data access.
@@ -32,6 +34,7 @@ NASA's Physical Sciences Informatics repository is the planned pathway for expan
 - `styles.css`, `scenario.css` — responsive visual system and scenario workbench
 - `evidence.js` — traceable, curated evidence notes
 - `app.js` — local retrieval, ranking, synthesis, and filters
+- `flame-lab.js`, `flame-lab.css` — independent offline image-processing workbench
 - `submission-copy.md` — draft submission fields and demo script
 
 ## Submission checklist

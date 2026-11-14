@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="./scenario.css">
   <script defer src="./evidence.js"></script>
   <script defer src="./app.js"></script>
+  <script defer src="./flame-lab.js"></script>
+  <link rel="stylesheet" href="./flame-lab.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to dashboard</a>
@@ -48,6 +50,19 @@
       <div class="stat"><span class="stat-value">03</span><span class="stat-label">mission lenses</span></div>
       <div class="stat"><span class="stat-value">01</span><span class="stat-label">trace for every claim</span></div>
       <div class="stat-note">A focused prototype built around the BASS-II evidence base. More PSI investigations can be added without changing the workflow.</div>
+    </section>
+
+    <section id="flame-lab" class="section-block flame-lab">
+      <div class="section-heading"><div><p class="eyebrow">RESEARCH TOOL / IMAGE → MEASUREMENT</p><h2>Turn flame images into motion evidence.</h2></div><span class="section-aside">LOCAL IMAGE ANALYSIS</span></div>
+      <p class="lab-intro">Load a time-ordered image sequence. Track an intensity boundary, inspect its sensitivity to the threshold, and export reproducible measurements. NASA's BASS-II report uses image-intensity profiles to study flame spread; this independent prototype makes that idea explorable.</p>
+      <div class="lab-layout"><form id="lab-form" class="lab-controls">
+        <label>EXPERIMENT IMAGES (PNG / JPEG / WEBP)<input id="lab-files" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><small>2–60 frames, naturally sorted by filename. Equal time spacing required. Images stay on this device.</small>
+        <label>SOURCE URL / DOI<input id="lab-source" type="text" placeholder="Paste the original NASA record or DOI"></label>
+        <div class="lab-pair"><label>SECONDS BETWEEN FRAMES<input id="lab-dt" type="number" min="0.001" step="any" value="1" required></label><label>PIXELS PER mm (OPTIONAL)<input id="lab-scale" type="number" min="0.001" step="any" placeholder="Leave blank for px/s"></label></div>
+        <div class="lab-pair"><label>BAND CENTER (% HEIGHT)<input id="lab-center" type="number" min="1" max="99" value="50" required></label><label>BAND HEIGHT (%)<input id="lab-band" type="number" min="1" max="100" value="40" required></label></div>
+        <div class="lab-pair"><label>INTENSITY THRESHOLD (1–245)<input id="lab-threshold" type="number" min="1" max="245" value="30" required></label><label>TRACKED EDGE<select id="lab-edge"><option value="right">Right boundary</option><option value="left">Left boundary</option></select></label></div>
+        <button class="button button-primary" id="lab-run" type="submit">Extract flame motion ↗</button><button type="button" class="download-button" id="lab-demo">Try synthetic method demo</button>
+      </form><article class="lab-results"><p id="lab-status" role="status">Choose experiment images or try the clearly labeled synthetic demo.</p><div class="lab-metrics" id="lab-metrics"></div><canvas id="lab-preview" width="640" height="260" aria-label="Selected image with analysis band and tracked boundary"></canvas><label class="lab-frame-label">INSPECT FRAME <input id="lab-frame" type="range" min="0" max="0" value="0" disabled><output id="lab-frame-name"></output></label><svg id="lab-chart" viewBox="0 0 640 210" role="img" aria-label="Tracked boundary position versus time, with threshold sensitivity"></svg><p id="lab-interpretation"></p><button id="lab-export" class="download-button" type="button" disabled>Export measurements + settings CSV ↓</button><details><summary>How the measurement works</summary><p>The tool averages pixel luminance across a horizontal band. The selected outermost threshold crossing defines an image boundary. A least-squares line fits boundary position against time. Repeating the extraction at threshold ±10 shows sensitivity to one processing choice; it is not a confidence interval. Optical motion is not automatically the material's flame-spread rate. Exclude igniters, camera movement, overlays, and background lights; verify calibration and image timestamps.</p><a href="https://ntrs.nasa.gov/citations/20210011385" target="_blank" rel="noreferrer">Method inspiration: BASS-II report §2.2.4, printed p. 22 ↗</a></details></article></div>
     </section>
 
     <section id="workbench" class="section-block workbench-section">

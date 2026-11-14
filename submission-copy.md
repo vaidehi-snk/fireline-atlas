@@ -18,6 +18,8 @@ To be added after Fireline Atlas is deployed to a public static host.
 
 ## Detailed project description
 
+Fireline's technical centerpiece is the offline Flame Motion Lab. Import a time-ordered experiment image sequence, select the analysis band and intensity threshold, and extract image-boundary motion with a least-squares velocity fit. Frame overlays and threshold-sensitivity traces make the processing inspectable. Exported CSV retains the source, time step, spatial calibration, settings, and per-frame measurements. The method is inspired by the image-intensity tracking described in NASA's BASS-II report, §2.2.4; it is an independent implementation awaiting validation against NASA image annotations. The included method demo is synthetic and is labeled as such. Optical boundary velocity is not automatically a validated physical flame-spread measurement.
+
 Spacecraft fires unfold in a low-gravity environment where buoyancy-driven flow changes. Research results are valuable, but a mission team still needs to connect a finding to the conditions under which it was measured. Fireline Atlas presents a focused, interactive evidence desk for that task.
 
 Users can ask about oxygen, heat release, fuel geometry, airflow, smoke, or crew monitoring; switch among habitat, suppression, and material-screening lenses; and filter the returned evidence. Fireline ranks each note by transparent topic matching, source tier, and mission relevance. Every result links to a NASA source, states its evidence type, and carries a bounded operational implication.
