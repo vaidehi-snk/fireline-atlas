@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "doi": "10.60555/4qc4-de67",
+    "source": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-25",
+    "originalFile": "PSI-25_Raw Data_GMT2014_050_BASS_S148M_TPB3_ProofSheet.pdf",
+    "sourceSha256": "7c8521870c90786ea7e201870cfeaa37c877192d4fc312d83c530ce41d2fe0ed",
+    "license": "CC0-1.0",
+    "test": "B3",
+    "investigator": "Bhattacharjee",
+    "sample": "148M (contact-sheet label; table uses 148)",
+    "date": "2014-02-19",
+    "timeMode": "Photo-clock offsets in seconds, relative to 12:20:37",
+    "note": "Low-resolution 314\u00d7209 contact-sheet images, reconstructed from six embedded strips without resizing. Exposure varies. No known spatial calibration or published boundary annotations. Not validated physical flame-spread measurements."
+  },
+  "frames": [
+    {
+      "name": "iss038e051275",
+      "clock": "12:20:37",
+      "time": 0,
+      "width": 314,
+      "height": 209,
+      "sha256": "0d1053d170645913e7231de424c939d4ede88734d2f86a70eb89a28f60e8cdfe"
+    },
+    {
+      "name": "iss038e051277",
+      "clock": "12:20:39",
+      "time": 2,
+      "width": 314,
+      "height": 209,
+      "sha256": "0b428a82be1d4da64bc43d7233e2e171efd0975c701d758822a00cf7967e826e"
+    },
+    {
+      "name": "iss038e051279",
+      "clock": "12:20:41",
+      "time": 4,
+      "width": 314,
+      "height": 209,
+      "sha256": "276de10b589df247847ce7db3764af29545139957962e211162dce910e5ed8a8"
+    },
+    {
+      "name": "iss038e051281",
+      "clock": "12:20:44",
+      "time": 7,
+      "width": 314,
+      "height": 209,
+      "sha256": "9600c06440181783bc5da3c3388fab248c5fb30cc58f46dd0a0ecc07401f6b5d"
+    },
+    {
+      "name": "iss038e051283",
+      "clock": "12:20:46",
+      "time": 9,
+      "width": 314,
+      "height": 209,
+      "sha256": "32396d1834f56c2298dc451cd49346df091b0309d66e772f5b6bf29612f69885"
+    },
+    {
+      "name": "iss038e051285",
+      "clock": "12:20:48",
+      "time": 11,
+      "width": 314,
+      "height": 209,
+      "sha256": "79976677ec097ff71d51ecbe55da85ec17f2b7012cc16f84a8012f5edbb9eb05"
+    },
+    {
+      "name": "iss038e051287",
+      "clock": "12:20:50",
+      "time": 13,
+      "width": 314,
+      "height": 209,
+      "sha256": "e2869660876289c231a3bcb86448cb0d47dd47edc672346747a748c21c585fe6"
+    },
+    {
+      "name": "iss038e051289",
+      "clock": "12:20:52",
+      "time": 15,
+      "width": 314,
+      "height": 209,
+      "sha256": "1ee1a821ec1968f0573d2bc171cf09b103bc9e7f7f4eaab6d6d7326f58441695"
+    },
+    {
+      "name": "iss038e051291",
+      "clock": "12:20:55",
+      "time": 18,
+      "width": 314,
+      "height": 209,
+      "sha256": "d52f6c11ad1f94636df8413c9c845c33df93af0939f921bc4889acddada11690"
+    },
+    {
+      "name": "iss038e051293",
+      "clock": "12:20:57",
+      "time": 20,
+      "width": 314,
+      "height": 209,
+      "sha256": "3d4917e8b9301153edd66276e19a536677c4547728f668f9269da742ed2e1d96"
+    },
+    {
+      "name": "iss038e051294",
+      "clock": "12:20:58",
+      "time": 21,
+      "width": 314,
+      "height": 209,
+      "sha256": "9ff8a1d74e958d6e91ca4f35bf970f4816729bb09d48c88132bd1fd2d967c59b"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-14T09:14:05.564Z",
+  "checks": [
+    "NASA B3 loads 11 real frames with explicit uncalibrated/source-time mode",
+    "Frame inspection preserves original photo clock and 21-second elapsed span",
+    "Measurement export retains unequal source timestamps, real-data flag, and source hash",
+    "Image case links to its exact B3 experimental-table record",
+    "Original-table view renders all 129 records and 120 exact numeric plot observations",
+    "Empty filters disable export and show an explicit empty state",
+    "Invalid oxygen filter bounds are rejected",
+    "Filtered export preserves all original records, censor strings, and provenance columns",
+    "Original NASA CSV download is byte-identical to archived source",
+    "Lunar, ISS, and Mars presets recompute evidence gaps",
+    "Question prompts update the deterministic evidence synthesis",
+    "All three workspaces fit the 390-pixel viewport",
+    "No uncaught page errors"
+  ],
+  "metrics": "4.804 px/s\nIMAGE-BOUNDARY VELOCITY\n11 / 11\nUSABLE / TOTAL FRAMES\n0.998\nLINEAR FIT R²",
+  "browserErrors": [],
+  "note": "Pipeline and UI verification on reproduced NASA contact-sheet images; not validation against independent boundary annotations or physical flame-spread rates."
+}

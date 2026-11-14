@@ -1,5 +1,7 @@
 # Fireline Atlas
 
+[Complete project handoff and continuation plan](PROJECT_CONTEXT.codex)
+
 **NASA Space Apps Challenge 2026 · Flame in Freefall**  
 An offline-ready, source-traceable evidence dashboard for microgravity fire-safety research.
 
@@ -11,7 +13,7 @@ An offline-ready, source-traceable evidence dashboard for microgravity fire-safe
 | Local app | Works directly from `index.html`; no build, API key, or sign-in |
 | Hosted demo | Not yet deployed or verified |
 | Image analysis | Local processing, frame inspection, and CSV export implemented |
-| Scientific validation | Synthetic checks pass; real NASA image-sequence validation remains planned |
+| Verification | Real NASA B3 contact-sheet case and 13 browser checks pass; independent physical measurement accuracy remains unvalidated |
 
 Built for [Flame in Freefall](https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/): an interactive dashboard that summarizes, ranks, and interprets microgravity combustion research for human space exploration.
 
@@ -30,7 +32,7 @@ git clone https://github.com/vaidehi-snk/fireline-atlas.git
 cd fireline-atlas
 ```
 
-The interface has three workspaces: **Flame Lab**, **Mission Review**, and **NASA Evidence**. Start with the synthetic method demo in Flame Lab, or bring a calibrated experiment image sequence. Workspace navigation supports keyboard arrows and direct links; all analysis stays on the device.
+The interface has three workspaces: **Flame Lab**, **Mission Review**, and **NASA Evidence**. Start with **Load real NASA B3 case** in Flame Lab, try the separate synthetic demo, or bring a calibrated experiment image sequence. Workspace navigation supports keyboard arrows and direct links; all analysis stays on the device.
 
 Open `index.html` in a modern browser. The dashboard and question ranking run locally; source links open NASA pages when online. No build step, API key, sign-in, or server is required.
 
@@ -38,7 +40,7 @@ For an optional local HTTP server, run `python -m http.server 8000` from the pro
 
 ## Try the workflow
 
-1. Open **Flame Lab** and select **Try synthetic method demo**. Inspect the analysis band, boundaries, graph, and threshold variants. This generated example contains no NASA observations.
+1. Open **Flame Lab** and select **Load real NASA B3 case**. Inspect 11 actual contact-sheet frames and their published photo clocks, the extracted optical boundary, and threshold variants. Use the source-record link to inspect the corresponding B3 experiment. The separate synthetic demo remains available and clearly labeled.
 2. For experiment data, select 2–60 PNG/JPEG/WEBP frames. Files are naturally sorted by filename and must share dimensions. Supply the source URL/DOI and seconds between equally spaced frames. Add pixels/mm calibration if known; otherwise results stay in pixel units.
 3. Set the analysis band, threshold, and boundary side; extract motion, inspect individual frames, and export the measurements with their settings.
 4. Open **Mission Review** to examine a hypothetical scenario or target habitat and export its gaps or proposed study.
@@ -48,11 +50,11 @@ Images are limited to 10 MB each, 4096 pixels per side, and 12 megapixels. Confi
 
 ## What works
 
-- **NASA experiment explorer:** 129 original BASS-II records from [PSI-25, DOI 10.60555/4qc4-de67](https://doi.org/10.60555/4qc4-de67). Filter by investigator, material/test text, and initial oxygen; inspect all 17 source fields; export selected records with DOI, file version, and source hash. The plot includes only exact numeric final CO readings. One censored, three non-numeric status, and five missing/none entries remain visible and are never replaced with zero. See [data provenance](data/PROVENANCE.md).
+- **NASA experiment explorer:** 129 original BASS-II records from [PSI-25, DOI 10.60555/4qc4-de67](https://doi.org/10.60555/4qc4-de67). Filter by investigator, material/test text, and initial oxygen; inspect all 17 source fields; export selected records with DOI, file version, and source hash. The plot includes only exact numeric final CO readings. Three censored, one other status, and five missing/none entries remain visible and are never replaced with zero. NASA's readme defines `OR` as over range (>1000 ppm), so those entries are explicitly censored. See [data provenance](data/PROVENANCE.md).
 
 The calibrated initial oxygen values in this table span **13.6–22.2%**, refining the report's approximate 14–21% overview. Mission range checks now use that recorded envelope, while explicitly noting that different configurations contribute to it and no matched-run coverage or safety boundary is implied.
 
-- **Flame Motion Lab:** import 2–60 local experiment images; average intensity over a selected band; track a left/right image boundary; fit motion over time; inspect threshold sensitivity and frame overlays; export CSV with source, timing, calibration, and settings. A labeled synthetic example demonstrates the method. No NASA image sequence is bundled and no NASA measurement accuracy is claimed.
+- **Flame Motion Lab:** load the bundled NASA B3 contact-sheet case or import 2–60 local images; track a left/right image boundary and inspect frame overlays, velocity fit and threshold sensitivity. The NASA case preserves unequal source timestamps and stays in uncalibrated pixel units. The contact-sheet PDF, manifest and reproduction script are included. Exposure changes and missing spatial calibration prevent a claim of validated physical flame-spread rate.
 
 - Search a mission question and rank curated findings by topic match, source tier, and mission lens.
 - Switch between habitat, suppression, and material-screening lenses.
@@ -84,15 +86,25 @@ Run the calculation checks with Node.js:
 ```sh
 node checks/flame-core.cjs
 node checks/bass-data.cjs
+node checks/nasa-case.cjs
 ```
 
 Checks cover interpolated boundaries, missing detections, clipping, band averaging, insufficient/constant fits, and recovery of exactly **3 px/s** from generated translated images.
 
 Native Chrome checks confirmed the built-in demo produces **6.000 px/s**, **12/12 usable frames**, and **R² = 1.000**, with overlays and sensitivity traces rendered. Workspace switching and example-question updates were exercised. A 390-pixel mobile DOM check found no overflowing main-content elements.
 
-These checks establish behavior on generated input, not accuracy on NASA experiments. A complete imported-file, download, and mission-preset walkthrough remains to be completed.
+The dataset checks verify source hashes, record identity, fields, quality handling, all 11 NASA image hashes/dimensions, the photo clocks and regression with unequal time gaps.
 
-The dataset check verifies the unchanged CSV's SHA-256, 129 unique investigator/test records, 17 source fields, six investigators, the oxygen envelope, and explicit handling of censored/status/missing values. The newly added experiment explorer has passed syntax/data checks; its browser interaction walkthrough is still pending because Computer Use stopped when it could not confidently identify Chrome's current URL.
+Automated checks in a separate headless Chrome profile now pass **13 browser checks** covering the real B3 case, frame inspection, unequal-timestamp CSV export, source-record linkage, all 129 records/120 plotted observations, empty and invalid filters, data exports, byte-identical source download, lunar/ISS/Mars preset updates, question prompts, mobile layouts and no uncaught page errors. See [QA report](data/browser-checks.json). Manual imports and all failure branches still need broader coverage.
+
+To reproduce browser QA with an installed Chrome:
+
+```sh
+npm install --no-save --package-lock=false playwright-core
+node checks/browser.cjs
+```
+
+Set `FIRELINE_CHROME` if Chrome is not at the script's default Windows path. The B3 default fit is approximately **4.804 px/s, 11/11 usable frames, R² ≈ 0.998**. This verifies pipeline behavior on reproduced NASA imagery; it is not error against independent reference boundaries or a validated physical spread rate. [Example exported measurements](data/B3-analysis-example.csv) retain timing and source settings.
 
 ## Data and limits
 
@@ -113,14 +125,18 @@ NASA's Physical Sciences Informatics repository is the planned pathway for expan
 - `data/PSI-25_Experimental-table_BASS-II.csv`, `data/PROVENANCE.md` — unchanged NASA table, DOI, license, and source hash
 - `scripts/import-bass.py`, `checks/bass-data.cjs` — reproducible dataset import and integrity checks
 - `submission-copy.md` — draft submission fields and demo script
+- `nasa-case.js`, `data/B3-case-manifest.json` — real NASA B3 preset and source timestamps/hashes
+- `data/BASS-II_B3_ProofSheet.pdf`, `data/BASS-II_ReadMe.docx` — original NASA source documents
+- `scripts/build-nasa-case.py`, `checks/nasa-case.cjs`, `checks/browser.cjs` — reproducible case preparation and verification
+- `PROJECT_CONTEXT.codex` — complete, tracked project handoff and continuation plan
 
 ## Next technical milestones
 
-- Add one verified NASA image sequence with test identity, timestamps, scale, and source provenance.
+- Obtain full-resolution images with verified spatial calibration and independent reference annotations; the bundled contact-sheet case supplies real imagery/timestamps but no spatial scale.
 - Compare extracted boundaries with reference annotations; report measurement errors and failure cases.
 - Add cropping/masking for overlays and checks for camera movement.
 - Expand to a complementary PSI investigation with traceable metadata.
-- Complete the browser walkthrough for imports, exports, and mission presets.
+- Broaden manual-import and failure-case browser coverage; core preset, export, and mission-preset checks now pass.
 
 ## Submission checklist
 

@@ -1,4 +1,4 @@
-/* Independent image-processing prototype. No NASA observations are bundled here. */
+/* Independent image processing; built-in NASA contact-sheet case retains source timestamps. */
 (() => {
   'use strict';
   function boundary(profile, threshold, side) {
@@ -39,10 +39,16 @@
   const $=id=>document.getElementById(id);
   const form=$('lab-form');if(!form)return;
   form.insertBefore($('lab-demo'),form.firstChild);
+  const nasaButton=document.createElement('button');nasaButton.type='button';nasaButton.id='lab-nasa';nasaButton.className='button button-primary';nasaButton.textContent='Load real NASA B3 case →';form.insertBefore(nasaButton,form.firstChild);
+  const caseInfo=document.createElement('div');caseInfo.id='lab-case-info';caseInfo.hidden=true;caseInfo.className='lab-case-info';
+  caseInfo.innerHTML='<strong>NASA BASS-II · B3 · sample 148M · 2014-02-19</strong><p>11 contact-sheet thumbnails, 314 × 209 px. Uses the published photo timestamps, including unequal gaps. Exposure varies; spatial calibration and published boundary annotations are unavailable. Output is optical motion in these reproduced images.</p><a href="#experiment-data" id="lab-case-record">Inspect B3’s source experiment record →</a>';
+  document.querySelector('.lab-results').insertBefore(caseInfo,$('lab-metrics'));
+  $('lab-case-record').addEventListener('click',()=>{$('data-pi').value='Bhattacharjee';$('data-query').value='B3';$('data-min').value=window.FIRELINE_DATA.meta.oxygenRange[0];$('data-max').value=window.FIRELINE_DATA.meta.oxygenRange[1];$('data-query').dispatchEvent(new Event('input',{bubbles:true}));});
   const empty=document.createElement('div');empty.className='lab-empty';
   empty.innerHTML='<div class="lab-empty-mark" aria-hidden="true">⌁</div><h3>Your next measurement starts here.</h3><p>Try the synthetic method demo to see the workflow, or load a sequence from an experiment.</p><span>IMAGES → BOUNDARIES → MOTION → CSV</span>';
   document.querySelector('.lab-results').insertBefore(empty,$('lab-metrics'));
-  let frames=[],demo=false,results=[],settings=null,busy=false,previewSerial=0;
+  let frames=[],demo=false,nasa=false,results=[],settings=null,busy=false,previewSerial=0;
+  function sourceMode(value){nasa=value;caseInfo.hidden=!nasa;$('lab-dt').readOnly=nasa;$('lab-scale').readOnly=nasa;$('lab-source').readOnly=nasa;}
   const status=message=>{$('lab-status').textContent=message;};
   function synthetic(index){
     const c=document.createElement('canvas');c.width=640;c.height=260;const ctx=c.getContext('2d');
@@ -50,11 +56,12 @@
     const glow=ctx.createRadialGradient(120+index*6,130,5,120+index*6,130,75);
     glow.addColorStop(0,'#fff3ae');glow.addColorStop(.35,'#ffae43');glow.addColorStop(.7,'#2378a9');glow.addColorStop(1,'#05090d');ctx.fillStyle=glow;ctx.fillRect(0,0,640,260);return c;
   }
-  async function imageAt(i){return demo?synthetic(i):createImageBitmap(frames[i]);}
-  function readSettings(){return {dt:Number($('lab-dt').value),scale:$('lab-scale').value?Number($('lab-scale').value):null,center:Number($('lab-center').value),band:Number($('lab-band').value),threshold:Number($('lab-threshold').value),side:$('lab-edge').value,source:$('lab-source').value.trim()||'Not supplied',synthetic:demo};}
+  async function imageAt(i){if(demo)return synthetic(i);if(nasa)return createImageBitmap(await (await fetch(frames[i].image)).blob());return createImageBitmap(frames[i]);}
+  function readSettings(){return {dt:Number($('lab-dt').value),scale:$('lab-scale').value?Number($('lab-scale').value):null,center:Number($('lab-center').value),band:Number($('lab-band').value),threshold:Number($('lab-threshold').value),side:$('lab-edge').value,source:$('lab-source').value.trim()||'Not supplied',synthetic:demo,nasa,timeMode:nasa?'published photo-clock offsets':'equal user-specified interval',sourceHash:nasa?window.FIRELINE_NASA_CASE.meta.sourceSha256:''};}
   function stale(){if(busy)return;$('lab-export').disabled=true;status('Inputs changed. Extract again to refresh measurements and exports.');}
   form.addEventListener('input',event=>{if(event.target.id!=='lab-files')stale();});
   $('lab-files').addEventListener('change',()=>{
+    sourceMode(false);
     document.querySelector('.lab-results').classList.remove('has-measurements');
     $('lab-export').disabled=true;results=[];$('lab-frame').disabled=true;
     const selected=[...$('lab-files').files];
@@ -62,14 +69,15 @@
     if(selected.some(f=>!['image/png','image/jpeg','image/webp'].includes(f.type)||f.size>10*1024*1024)){status('Use PNG, JPEG, or WEBP files, each under 10 MB.');frames=[];return;}
     frames=selected.sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));demo=false;results=[];$('lab-export').disabled=true;$('lab-frame').disabled=true;status(`${frames.length} images ready, ordered by filename. Confirm timing, band, calibration and source, then extract.`);
   });
-  $('lab-demo').addEventListener('click',()=>{demo=true;frames=Array.from({length:12},(_,i)=>({name:`synthetic-${String(i).padStart(2,'0')}`}));$('lab-files').value='';$('lab-source').value='SYNTHETIC METHOD DEMO — not NASA experimental data';$('lab-dt').value='1';$('lab-scale').value='';$('lab-center').value='50';$('lab-band').value='40';$('lab-threshold').value='30';$('lab-edge').value='right';form.requestSubmit();});
+  $('lab-demo').addEventListener('click',()=>{sourceMode(false);demo=true;frames=Array.from({length:12},(_,i)=>({name:`synthetic-${String(i).padStart(2,'0')}`}));$('lab-files').value='';$('lab-source').value='SYNTHETIC METHOD DEMO — not NASA experimental data';$('lab-dt').value='1';$('lab-scale').value='';$('lab-center').value='50';$('lab-band').value='40';$('lab-threshold').value='30';$('lab-edge').value='right';form.requestSubmit();});
+  nasaButton.addEventListener('click',()=>{const data=window.FIRELINE_NASA_CASE;if(!data){status('NASA case could not be loaded. Check nasa-case.js is present.');return;}sourceMode(true);demo=false;frames=data.frames.map(frame=>({...frame}));$('lab-files').value='';$('lab-source').value='NASA PSI-25 / B3 contact sheet / DOI '+data.meta.doi;$('lab-dt').value='1';$('lab-scale').value='';$('lab-center').value='55';$('lab-band').value='30';$('lab-threshold').value='30';$('lab-edge').value='right';form.requestSubmit();});
   async function preview(index){
     if(!results.length)return;const serial=++previewSerial;const image=await imageAt(index);
     if(serial!==previewSerial){image.close?.();return;}
     const c=$('lab-preview');c.width=image.width;c.height=image.height;const ctx=c.getContext('2d');ctx.drawImage(image,0,0);image.close?.();
     const row=results[index];ctx.fillStyle='#80d8cc22';ctx.fillRect(0,row.y0,c.width,row.y1-row.y0);ctx.strokeStyle='#80d8cc';ctx.lineWidth=Math.max(1,c.width/500);ctx.strokeRect(0,row.y0,c.width,row.y1-row.y0);
     [row.low,row.front,row.high].forEach((edge,i)=>{if(!edge)return;ctx.strokeStyle=i===1?'#ffbd68':'#ffbd6877';ctx.beginPath();ctx.moveTo(edge.x,0);ctx.lineTo(edge.x,c.height);ctx.stroke();});
-    $('lab-frame-name').textContent=`${frames[index].name} · ${row.t.toFixed(3)} s${row.front?'':' · NO DETECTION'}`;
+    $('lab-frame-name').textContent=`${frames[index].name} · ${row.t.toFixed(3)} s${frames[index].clock?' · photo '+frames[index].clock:''}${row.front?'':' · NO DETECTION'}`;
   }
   function chart(){
     const svg=$('lab-chart'),ns='http://www.w3.org/2000/svg';svg.replaceChildren();
@@ -94,24 +102,24 @@
         if(width!==null&&(img.width!==width||img.height!==height)){img.close?.();throw new Error('All frames must have identical dimensions.');}
         width=img.width;height=img.height;const c=document.createElement('canvas');c.width=width;c.height=height;const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(img,0,0);img.close?.();
         const {profile,y0,y1}=profileFromPixels(ctx.getImageData(0,0,width,height).data,width,height,settings.center,settings.band);
-        results.push({t:i*settings.dt,front:boundary(profile,settings.threshold,settings.side),low:boundary(profile,Math.max(1,settings.threshold-10),settings.side),high:boundary(profile,Math.min(255,settings.threshold+10),settings.side),y0,y1,width,height});
+        results.push({t:settings.nasa?frames[i].time:i*settings.dt,front:boundary(profile,settings.threshold,settings.side),low:boundary(profile,Math.max(1,settings.threshold-10),settings.side),high:boundary(profile,Math.min(255,settings.threshold+10),settings.side),y0,y1,width,height});
         await new Promise(resolve=>setTimeout(resolve,0));
       }
       const fitted=fit(results.filter(r=>r.front&&!r.front.clipped).map(r=>({t:r.t,x:r.front.x}))),divisor=settings.scale||1,unit=settings.scale?'mm/s':'px/s';
       const sensitivities=['low','high'].map(key=>fit(results.filter(r=>r[key]&&!r[key].clipped).map(r=>({t:r.t,x:r[key].x})))).filter(Boolean);
       const metric=(title,value)=>{const d=document.createElement('div');const strong=document.createElement('strong');strong.textContent=value;const span=document.createElement('span');span.textContent=title;d.append(strong,span);return d;};
       $('lab-metrics').replaceChildren(metric('IMAGE-BOUNDARY VELOCITY',fitted?`${(fitted.slope/divisor).toFixed(3)} ${unit}`:'Insufficient data'),metric('USABLE / TOTAL FRAMES',`${fitted?.n||0} / ${frames.length}`),metric('LINEAR FIT R²',fitted?.r2!==null&&fitted?fitted.r2.toFixed(3):'Undefined'));
-      const spread=sensitivities.length===2?`Threshold sensitivity: fitted velocities ${sensitivities.map(f=>(f.slope/divisor).toFixed(3)).join(' to ')} ${unit}. `:'Threshold sensitivity could not be fitted at both levels. ';
+      const spread=sensitivities.length===2?`Threshold sensitivity: fitted velocities ${sensitivities.map(f=>f.slope/divisor).sort((a,b)=>a-b).map(v=>v.toFixed(3)).join(' to ')} ${unit}. `:'Threshold sensitivity could not be fitted at both levels. ';
       $('lab-interpretation').textContent=spread+'The two threshold variants are processing sensitivity, not statistical uncertainty. Missing and image-border-clipped detections are excluded from velocity fits. Signed velocity follows the image x axis. Camera motion, exposure changes, and bright hardware may bias this extraction.';
       $('lab-frame').max=String(frames.length-1);$('lab-frame').value='0';$('lab-frame').disabled=false;document.querySelector('.lab-results').classList.add('has-measurements');chart();await preview(0);
-      $('lab-export').disabled=false;status(`${demo?'SYNTHETIC DEMO — no NASA observations. ':''}${frames.length} frames analyzed. ${results.filter(r=>!r.front).length} missing and ${results.filter(r=>r.front?.clipped).length} border-clipped detections. ${settings.scale?'User-supplied spatial calibration.':'Uncalibrated: pixel units.'}`);
+      $('lab-export').disabled=false;status(`${demo?'SYNTHETIC DEMO — no NASA observations. ':nasa?'REAL NASA CONTACT-SHEET CASE — published timestamps, changing exposure. ':''}${frames.length} frames analyzed. ${results.filter(r=>!r.front).length} missing and ${results.filter(r=>r.front?.clipped).length} border-clipped detections. ${settings.scale?'User-supplied spatial calibration.':'Uncalibrated: pixel units.'}`);
     }catch(error){results=[];document.querySelector('.lab-results').classList.remove('has-measurements');$('lab-metrics').replaceChildren();$('lab-chart').replaceChildren();$('lab-frame').disabled=true;status(`Analysis stopped: ${error.message}`);}
     finally{busy=false;[...form.elements].forEach(el=>el.disabled=false);}
   });
   $('lab-frame').addEventListener('input',()=>preview(Number($('lab-frame').value)).catch(error=>status(error.message)));
   $('lab-export').addEventListener('click',()=>{
-      const headers=['frame','time_s','boundary_px','boundary_mm_image_origin','threshold_low_boundary_px','threshold_high_boundary_px','clipped','source','synthetic','seconds_per_frame','pixels_per_mm','threshold','threshold_low','threshold_high','band_center_percent','band_height_percent','edge','image_width_px','image_height_px','method'];
-      const rows=results.map((r,i)=>[frames[i].name,r.t,r.front?.x??'',r.front&&settings.scale?r.front.x/settings.scale:'',r.low?.x??'',r.high?.x??'',r.front?.clipped??'',settings.source,settings.synthetic,settings.dt,settings.scale??'',settings.threshold,Math.max(1,settings.threshold-10),Math.min(255,settings.threshold+10),settings.center,settings.band,settings.side,r.width,r.height,'band-mean luminance; outermost threshold crossing; independent prototype']);
+      const headers=['frame','time_s','boundary_px','boundary_mm_image_origin','threshold_low_boundary_px','threshold_high_boundary_px','clipped','source','synthetic','seconds_per_frame','pixels_per_mm','threshold','threshold_low','threshold_high','band_center_percent','band_height_percent','edge','image_width_px','image_height_px','method','timing_mode','photo_clock','source_sha256'];
+      const rows=results.map((r,i)=>[frames[i].name,r.t,r.front?.x??'',r.front&&settings.scale?r.front.x/settings.scale:'',r.low?.x??'',r.high?.x??'',r.front?.clipped??'',settings.source,settings.synthetic,settings.nasa?'':settings.dt,settings.scale??'',settings.threshold,Math.max(1,settings.threshold-10),Math.min(255,settings.threshold+10),settings.center,settings.band,settings.side,r.width,r.height,'band-mean luminance; outermost threshold crossing; independent prototype',settings.timeMode,frames[i].clock||'',settings.sourceHash]);
     const quote=value=>{let v=String(value);if(/^[=+@\-]/.test(v)&&!Number.isFinite(Number(v)))v="'"+v;return '"'+v.replaceAll('"','""')+'"';};
     const csv=[headers,...rows].map(row=>row.map(quote).join(',')).join('\r\n');const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='fireline-image-measurements.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   });

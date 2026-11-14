@@ -6,7 +6,7 @@ Fireline Atlas
 
 ## High-level project summary
 
-Fireline Atlas is a source-traceable intelligence dashboard that helps crews and mission planners explore NASA microgravity combustion research. Ask a mission question, choose a mission lens, and see the most relevant findings ranked with their NASA sources and limitations. The prototype spotlights a BASS-II lesson: heat-release rate alone does not explain hardware damage; duration, fuel geometry, ventilation, and heat path matter too.
+Fireline Atlas connects actual NASA flame imagery, 129 original BASS-II experiment records, and source-linked findings in an inspectable research workflow. Extract optical motion with published photo timestamps, inspect threshold sensitivity, trace the image case to its experimental conditions, and map evidence gaps for target habitats. The prototype preserves provenance and missing/censored readings while keeping measured image motion distinct from unvalidated physical fire predictions.
 
 ## Link to project demo
 
@@ -20,7 +20,7 @@ To be added after Fireline Atlas is deployed to a public static host.
 
 Fireline now incorporates the original NASA PSI-25 BASS-II experimental table: 129 records, six investigators, and 17 preserved source fields, attributed to DOI 10.60555/4qc4-de67. Users can filter tests, inspect initial oxygen versus exact numeric final CO, open the full record, and export selected rows with source provenance and file hash. Censored, status, and missing CO readings remain distinct. The recorded initial oxygen envelope is 13.6–22.2%, refining the report overview; coverage across heterogeneous tests does not establish matched conditions, causation, peak CO, or a safety threshold. This is real experiment-table ingestion; image-sequence accuracy validation remains a separate unfinished milestone.
 
-Fireline's technical centerpiece is the offline Flame Motion Lab. Import a time-ordered experiment image sequence, select the analysis band and intensity threshold, and extract image-boundary motion with a least-squares velocity fit. Frame overlays and threshold-sensitivity traces make the processing inspectable. Exported CSV retains the source, time step, spatial calibration, settings, and per-frame measurements. The method is inspired by the image-intensity tracking described in NASA's BASS-II report, §2.2.4; it is an independent implementation awaiting validation against NASA image annotations. The included method demo is synthetic and is labeled as such. Optical boundary velocity is not automatically a validated physical flame-spread measurement.
+Fireline's technical centerpiece is the offline Flame Motion Lab. Load eleven real NASA B3 contact-sheet frames with their unequal source timestamps, or import a local sequence. Select an analysis band and threshold, extract image-boundary motion with a least-squares fit, and inspect overlays and threshold sensitivity. Exports retain source clocks, timing mode, settings and hashes. The B3 case links directly to its original experiment-table record. The method is inspired by NASA's BASS-II report, §2.2.4, but remains an independent implementation awaiting physical calibration and independent boundary annotations. Contact-sheet resolution and changing exposure are explicit limitations. A separate synthetic demo is also available and labeled. Thirteen automated browser checks pass for the core workflow, exports, filters, presets and mobile layouts; these verify software behavior rather than physical measurement accuracy.
 
 Spacecraft fires unfold in a low-gravity environment where buoyancy-driven flow changes. Research results are valuable, but a mission team still needs to connect a finding to the conditions under which it was measured. Fireline Atlas presents a focused, interactive evidence desk for that task.
 
@@ -40,6 +40,8 @@ Fireline uses an inspectable, local evidence-synthesis engine. It expands missio
 
 ## NASA data
 
+NASA PSI-25 B3 contact sheet, original file `PSI-25_Raw Data_GMT2014_050_BASS_S148M_TPB3_ProofSheet.pdf`, and BASS-II readme, under the same source DOI. The repository includes unchanged source documents, a reproducible thumbnail reconstruction script, and a manifest with photo clocks and image hashes. The built-in case uses 11 unresized 314×209 thumbnails over a 21-second source-time span. No spatial calibration or independent published boundary annotation is claimed.
+
 NASA PSI-25, BASS-II experimental table, DOI https://doi.org/10.60555/4qc4-de67. Original file `PSI-25_Experimental table_BASS-II.csv`, file version 1, CC0-1.0, retrieved 2026-11-14. A byte-preserving CSV and its SHA-256 are included with a reproducible importer and data-quality checks. See `data/PROVENANCE.md` for the source trail.
 
 NASA/TM-20210011385, *Burning and Suppression of Solids—II (BASS-II)*, especially the summary findings on heat-release rate, oxygen concentration, duct-flow variation, test geometry, and combustion-product sensing. NASA Physical Sciences Informatics (PSI) is identified as the pathway for expanding this curated evidence set with investigation-level raw and analyzed data.
@@ -53,14 +55,14 @@ NASA/TM-20210011385, *Burning and Suppression of Solids—II (BASS-II)*, especia
 
 ## 30-second demo script
 
-**0:00–0:04** “Fireline Atlas turns NASA microgravity fire research into an evidence-backed mission review.”
+**0:00–0:04** Show team/member names and project title. “Fireline Atlas turns NASA combustion data into inspectable mission evidence.”
 
-**0:04–0:10** Set the workbench to **opposed thick slab**, **prolonged**, **heat directed to hardware**, then select **Analyze scenario**. “Fireline finds the closest documented BASS-II case.”
+**0:04–0:11** Load **real NASA B3 case** and scrub frames. “We extract optical motion from real NASA images, preserving timestamps and showing processing sensitivity.”
 
-**0:10–0:18** Show the analogue and prompts. “The report describes window damage near 100 watts in a prolonged burn, but no damage in a briefer burn near 110. This is a case match, not a prediction.”
+**0:11–0:19** Open the B3 source-record link, reset filters, and show censored values. “Each case links to experimental conditions across 129 tests. Missing and over-range readings stay explicit.”
 
-**0:18–0:25** Toggle CO and CO₂, move oxygen outside the test range, and analyze again. “It exposes missing sensor context and marks where NASA’s evidence stops.”
+**0:19–0:26** Show the lunar transfer gaps and export. “For future habitats, Fireline identifies evidence gaps and exports traceable research briefs.”
 
-**0:25–0:30** Select **Download review note**. “Your team gets a source-linked review brief—not a black-box risk score.”
+**0:26–0:30** Show sources and project URL. “Next: independent physical validation, supporting better fire-safety research.”
 
 Add team name and team members on screen or in the introduction. Use the demo only after the team and the project URL are finalized.

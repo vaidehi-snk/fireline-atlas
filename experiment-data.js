@@ -2,7 +2,7 @@
   'use strict';
   const fields={o2:'Calibrated  initial O2 % by vol ',finalO2:'Calibrated final O2 % by vol',co:'Final CO (ppm)',initialCO:'Initial CO (ppm)'};
   function numeric(value){const text=String(value??'').trim();return /^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(text)&&Number.isFinite(Number(text))?Number(text):null;}
-  function kind(value){const text=String(value??'').trim();if(!text||/^none$/i.test(text))return 'missing';if(/^[<>]/.test(text))return 'censored';return numeric(text)===null?'status':'numeric';}
+  function kind(value){const text=String(value??'').trim();if(!text||/^none$/i.test(text))return 'missing';if(/^[<>]/.test(text)||text==='OR')return 'censored';return numeric(text)===null?'status':'numeric';}
   if(typeof module!=='undefined')module.exports={numeric,kind};
   if(typeof document==='undefined')return;
   const dataset=window.FIRELINE_DATA;if(!dataset)return;
@@ -31,7 +31,7 @@
     visible=records.filter(({raw})=>{const oxygen=numeric(raw[fields.o2]);return (pi==='all'||raw.PI===pi)&&(!query||`${raw['Test #']} ${raw['Fuel Sample Material']} ${raw['Sample #']}`.toLowerCase().includes(query))&&(min===null||oxygen!==null&&oxygen>=min)&&(max===null||oxygen!==null&&oxygen<=max);});
     const quality={numeric:0,missing:0,censored:0,status:0};visible.forEach(({raw})=>quality[kind(raw[fields.co])]++);
     $('data-summary').replaceChildren(...[[visible.length,'SOURCE RECORDS'],[quality.numeric,'EXACT FINAL CO'],[quality.censored,'CENSORED FINAL CO'],[quality.missing+quality.status,'MISSING / STATUS CO']].map(([value,label])=>{const box=make('div');box.append(make('strong',String(value)),make('span',label));return box;}));
-    $('data-quality').textContent=`${quality.numeric} plotted; ${quality.censored} censored (e.g. >500), ${quality.status} non-numeric status, and ${quality.missing} blank/none final CO records are retained in the table and excluded from the plot. No missing reading is replaced with zero.`;
+    $('data-quality').textContent=`${quality.numeric} plotted; ${quality.censored} censored (>500 or OR, documented by NASA's readme as >1000 ppm), ${quality.status} other status, and ${quality.missing} blank/none final CO records remain in the table and are excluded from the plot. No missing reading is replaced with zero.`;
     $('data-rows').replaceChildren(...visible.map(record=>{const raw=record.raw,tr=make('tr'),cell=make('td'),button=make('button',raw['Test #']);button.type='button';button.addEventListener('click',()=>detail(record));cell.append(button);tr.append(cell);const category=kind(raw[fields.co]);let note=category==='numeric'?'Exact CO entry':category==='censored'?'Censored; not an exact value':category==='missing'?'Missing / none in source':'Status entry retained';if(numeric(raw[fields.initialCO])<0&&numeric(raw[fields.initialCO])!==null)note+=' · negative initial CO recorded';[raw.PI,raw['Fuel Sample Material'],raw[fields.o2],raw[fields.finalO2],raw[fields.initialCO],raw[fields.co],note].forEach(value=>tr.append(make('td',String(value).trim()||'—')));return tr;}));
     if(!visible.length){const tr=make('tr'),td=make('td','No records match these filters. Reset or widen the selection.');td.colSpan=8;tr.append(td);$('data-rows').append(tr);$('data-detail').replaceChildren(make('h3','No matching record'));}else detail(visible.find(record=>record.index===selected)||visible[0]);
     $('data-export').disabled=!visible.length;plot();
