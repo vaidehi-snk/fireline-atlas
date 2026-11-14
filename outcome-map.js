@@ -3,6 +3,12 @@ window.renderOutcomeMap = function (records, numeric, oxygenField, inspect) {
   const svg = document.querySelector('#outcome-map');
   const picker = document.querySelector('#map-test');
   const ns = 'http://www.w3.org/2000/svg';
+  const labels = {
+    'camera loss with radiometer drop': 'Appeared to go out',
+    'visible near observation end': 'Still burning near end of observation',
+    inconclusive: 'Inconclusive',
+    unmeasured: 'Video unmeasured'
+  };
   const colors = {
     'camera loss with radiometer drop': '#80d8cc',
     'visible near observation end': '#ffa967',
@@ -15,6 +21,14 @@ window.renderOutcomeMap = function (records, numeric, oxygenField, inspect) {
     return { record, oxygen: numeric(raw[oxygenField]), air: numeric(raw['Air display']),
       status: result?.trace ? result.status : 'unmeasured' };
   }).filter(p => p.oxygen !== null && p.air !== null);
+  const legend = document.querySelector('#map-legend');
+  legend.replaceChildren();
+  for (const [status, label] of Object.entries(labels)) {
+    const item = document.createElement('span');
+    item.style.color = colors[status];
+    item.textContent = `● ${label} (${points.filter(p => p.status === status).length})`;
+    legend.append(item);
+  }
   svg.replaceChildren();
   picker.replaceChildren(new Option('Choose a plotted test', ''));
   picker.disabled = !points.length;
@@ -22,7 +36,7 @@ window.renderOutcomeMap = function (records, numeric, oxygenField, inspect) {
   for (const p of points) {
     const id = p.record.raw['Test #'];
     byId.set(id, p);
-    picker.add(new Option(`${id} · ${p.oxygen}% O₂ · ${p.air} cm/s · ${p.status}`, id));
+    picker.add(new Option(`${id} · ${p.oxygen}% O₂ · ${p.air} cm/s · ${labels[p.status] || p.status}`, id));
   }
   function select(id) {
     picker.value = id;
@@ -38,6 +52,10 @@ window.renderOutcomeMap = function (records, numeric, oxygenField, inspect) {
   }
   const x = oxygen => 45 + (oxygen - 12) * 30;
   const y = air => 205 - air * 10;
+  const maxOxygen = window.FIRELINE_DATA.meta.oxygenRange[1];
+  draw('rect',{x:x(maxOxygen), y:50, width:x(30)-x(maxOxygen), height:155, fill:'#f8d58d12'});
+  draw('text',{x:(x(maxOxygen)+x(30))/2,y:109,'text-anchor':'middle'},'Beyond BASS-II coverage');
+  draw('text',{x:(x(maxOxygen)+x(30))/2,y:127,'text-anchor':'middle'},`Highest recorded O₂: ${maxOxygen}%`);
   for (const air of [0, 5, 10, 15]) {
     draw('line', {x1:45, x2:600, y1:y(air), y2:y(air), stroke:'#34494d'});
     draw('text', {x:35,y:y(air)+4,'text-anchor':'end'},air);
@@ -46,7 +64,7 @@ window.renderOutcomeMap = function (records, numeric, oxygenField, inspect) {
   draw('text',{x:45,y:19},'Duct air display (cm/s)');
   draw('text',{x:322,y:249,'text-anchor':'middle'},'Calibrated initial oxygen (% by volume)');
   draw('line',{x1:x(30),x2:x(30),y1:32,y2:207,stroke:'#f8d58d','stroke-dasharray':'4 4'});
-  draw('text',{x:x(30)-7,y:42,'text-anchor':'end',fill:'#f8d58d'},'30% lunar scenario');
+  draw('text',{x:x(30)-7,y:42,'text-anchor':'end',fill:'#f8d58d'},'Moon base scenario · 30% O₂');
   // Concentric rings keep coincident tests at their true coordinates.
   const groups = new Map();
   for (const p of points) {
@@ -60,7 +78,7 @@ window.renderOutcomeMap = function (records, numeric, oxygenField, inspect) {
       const dot = draw('circle',{cx:x(p.oxygen),cy:y(p.air),r:4+(group.length-1-i)*3,
         fill:colors[p.status] || colors.inconclusive,stroke:'#122326','stroke-width':1});
       const title = document.createElementNS(ns,'title');
-      title.textContent = `${id} · ${p.oxygen}% · ${p.air} cm/s · ${p.status}`;
+      title.textContent = `${id} · ${p.oxygen}% · ${p.air} cm/s · ${labels[p.status] || p.status}`;
       dot.append(title);
       dot.onclick = () => select(id);
     });

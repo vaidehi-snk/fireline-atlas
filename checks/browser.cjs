@@ -31,6 +31,8 @@ function parseCSV(text){const rows=[];let row=[],value='',quoted=false;for(let i
   assert.match(await page.locator('#data-rows').innerText(),/B3.*Bhattacharjee/s);pass('Image case links to its exact B3 experimental-table record');
   await page.locator('#data-reset').click();assert.equal(await page.locator('#data-rows tr').count(),129);assert.equal(await page.locator('#data-plot circle').count(),120);pass('Original-table view renders all 129 records and 120 exact numeric plot observations');
   assert.equal(await page.locator('#outcome-map circle').count(),25);
+  assert.deepEqual(await page.locator('#map-legend span').allTextContents(),['● Appeared to go out (12)','● Still burning near end of observation (2)','● Inconclusive (6)','● Video unmeasured (5)']);
+  assert.match(await page.locator('#outcome-map').textContent(),/Highest recorded O₂: 22.2%/);
   assert.match(await page.locator('#map-count').innerText(),/104 lack a single numeric/);
   await page.locator('#map-test').selectOption('B1');
   assert.match(await page.locator('#data-detail').innerText(),/B1 · Bhattacharjee/);
