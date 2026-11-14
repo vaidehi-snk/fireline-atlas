@@ -9,11 +9,14 @@
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./scenario.css">
   <script defer src="./evidence.js"></script>
+  <script defer src="./bass-data.js"></script>
   <script defer src="./app.js"></script>
   <script defer src="./flame-lab.js"></script>
   <link rel="stylesheet" href="./flame-lab.css">
   <link rel="stylesheet" href="./workspace.css">
   <script defer src="./workspace.js"></script>
+  <script defer src="./experiment-data.js"></script>
+  <link rel="stylesheet" href="./experiment-data.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to dashboard</a>
@@ -49,7 +52,7 @@
 
     <section class="stat-row" aria-label="Project scope">
       <div class="stat"><span class="stat-value" id="evidence-count">08</span><span class="stat-label">curated NASA findings</span></div>
-      <div class="stat"><span class="stat-value">03</span><span class="stat-label">mission lenses</span></div>
+      <div class="stat"><span class="stat-value">129</span><span class="stat-label">NASA experiment records</span></div>
       <div class="stat"><span class="stat-value">01</span><span class="stat-label">trace for every claim</span></div>
       <div class="stat-note">A focused prototype built around the BASS-II evidence base. More PSI investigations can be added without changing the workflow.</div>
     </section>
@@ -117,6 +120,15 @@
         <article class="transfer-result" aria-live="polite"><span class="lens-label">TRANSFER ASSESSMENT</span><h3 id="transfer-title">Evidence gap detected</h3><p id="transfer-summary"></p><div id="transfer-axes" class="transfer-axes"></div><a href="https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/" target="_blank" rel="noreferrer">Challenge brief: lunar atmosphere and partial-gravity context ↗</a><button type="button" class="download-button" id="download-transfer">Export mission gap brief ↓</button></article>
       </div>
       <p class="transfer-disclaimer">This is a research-transfer coverage check, not material qualification. Challenge background cites a lunar habitat oxygen concentration of 30% or greater and pressure of 10.2 psi or less; the curated BASS-II notes do not establish safety at those conditions. CFI-G gaseous-flame findings are a different experiment family from solid-material fire tests.</p>
+    </section>
+
+    <section id="experiment-data" class="section-block experiment-data">
+      <div class="section-heading"><div><p class="eyebrow">NASA PSI-25 / ORIGINAL EXPERIMENT RECORDS</p><h2>Explore 129 documented BASS-II tests.</h2></div><a class="data-doi" href="https://doi.org/10.60555/4qc4-de67" target="_blank" rel="noreferrer">DOI: 10.60555/4qc4-de67 ↗</a></div>
+      <p class="data-intro">Inspect NASA's experimental table, filter comparable records, and preserve the values the instruments actually recorded—including missing values and non-numeric status entries. This is a descriptive view of heterogeneous tests.</p>
+      <form id="data-filters" class="data-filters"><label>INVESTIGATOR<select id="data-pi"><option value="all">All investigators</option></select></label><label>MATERIAL OR TEST SEARCH<input id="data-query" type="search" placeholder="e.g. PMMA, fabric, B3"></label><label>INITIAL O₂ MIN (%)<input id="data-min" type="number" step="0.1" value="13.6"></label><label>INITIAL O₂ MAX (%)<input id="data-max" type="number" step="0.1" value="22.2"></label><button class="download-button" type="button" id="data-reset">Reset filters</button></form>
+      <div id="data-summary" class="data-summary" role="status"></div><div class="data-layout"><article class="data-plot-panel"><h3>Initial oxygen vs. final CO</h3><svg id="data-plot" viewBox="0 0 640 300" role="img" aria-label="Descriptive scatter plot of initial oxygen percentage and exact numeric final carbon monoxide readings"></svg><p id="data-quality"></p><p>Only exact numeric final CO readings are plotted. Initial concentrations, fuel, geometry, and flow vary between records; this plot does not establish causation or a universal threshold. Final CO is an endpoint reading, not necessarily the peak.</p></article><article id="data-detail" class="data-detail" aria-live="polite"></article></div>
+      <div class="data-table-wrap" tabindex="0" aria-label="Experiment table; scroll horizontally to view all columns"><table class="data-table"><caption>Filtered source records · select a test to inspect all 17 original fields</caption><thead><tr><th scope="col">Test</th><th scope="col">Investigator</th><th scope="col">Material</th><th scope="col">Initial O₂ %</th><th scope="col">Final O₂ %</th><th scope="col">Initial CO ppm</th><th scope="col">Final CO ppm</th><th scope="col">Record note</th></tr></thead><tbody id="data-rows"></tbody></table></div>
+      <div class="data-export"><button id="data-export" type="button" class="download-button">Export filtered records + provenance ↓</button><a href="./data/PSI-25_Experimental-table_BASS-II.csv" download>Download unchanged NASA CSV</a></div><p class="data-provenance">Source file: PSI-25_Experimental table_BASS-II.csv · file version 1 · CC0-1.0 · retrieved 2026-11-14. All source values remain intact. The recorded initial O₂ envelope is 13.6–22.2%; it is broader than the report's approximate 14–21% overview and spans different test configurations.</p>
     </section>
 
     <section id="ask" class="section-block intelligence-section">

@@ -18,6 +18,8 @@ To be added after Fireline Atlas is deployed to a public static host.
 
 ## Detailed project description
 
+Fireline now incorporates the original NASA PSI-25 BASS-II experimental table: 129 records, six investigators, and 17 preserved source fields, attributed to DOI 10.60555/4qc4-de67. Users can filter tests, inspect initial oxygen versus exact numeric final CO, open the full record, and export selected rows with source provenance and file hash. Censored, status, and missing CO readings remain distinct. The recorded initial oxygen envelope is 13.6–22.2%, refining the report overview; coverage across heterogeneous tests does not establish matched conditions, causation, peak CO, or a safety threshold. This is real experiment-table ingestion; image-sequence accuracy validation remains a separate unfinished milestone.
+
 Fireline's technical centerpiece is the offline Flame Motion Lab. Import a time-ordered experiment image sequence, select the analysis band and intensity threshold, and extract image-boundary motion with a least-squares velocity fit. Frame overlays and threshold-sensitivity traces make the processing inspectable. Exported CSV retains the source, time step, spatial calibration, settings, and per-frame measurements. The method is inspired by the image-intensity tracking described in NASA's BASS-II report, §2.2.4; it is an independent implementation awaiting validation against NASA image annotations. The included method demo is synthetic and is labeled as such. Optical boundary velocity is not automatically a validated physical flame-spread measurement.
 
 Spacecraft fires unfold in a low-gravity environment where buoyancy-driven flow changes. Research results are valuable, but a mission team still needs to connect a finding to the conditions under which it was measured. Fireline Atlas presents a focused, interactive evidence desk for that task.
@@ -37,6 +39,8 @@ The prototype runs locally in a browser with no API key or sign-in. Its current 
 Fireline uses an inspectable, local evidence-synthesis engine. It expands mission questions with combustion-science synonyms, ranks source-linked evidence using topic match, NASA source tier, and selected mission context, then generates a concise synthesis from those ranked findings. The user can inspect the evidence and limitations behind the answer. This prototype does not claim a general-purpose language model or validated predictive intelligence; its SI workflow is deliberately transparent and works without an external service. A future version can add a validated language model while retaining source-grounded retrieval, citation checks, and human review.
 
 ## NASA data
+
+NASA PSI-25, BASS-II experimental table, DOI https://doi.org/10.60555/4qc4-de67. Original file `PSI-25_Experimental table_BASS-II.csv`, file version 1, CC0-1.0, retrieved 2026-11-14. A byte-preserving CSV and its SHA-256 are included with a reproducible importer and data-quality checks. See `data/PROVENANCE.md` for the source trail.
 
 NASA/TM-20210011385, *Burning and Suppression of Solids—II (BASS-II)*, especially the summary findings on heat-release rate, oxygen concentration, duct-flow variation, test geometry, and combustion-product sensing. NASA Physical Sciences Informatics (PSI) is identified as the pathway for expanding this curated evidence set with investigation-level raw and analyzed data.
 

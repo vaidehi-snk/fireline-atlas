@@ -21,7 +21,7 @@ Built for [Flame in Freefall](https://www.spaceappschallenge.org/2026/challenges
 | --- | --- | --- |
 | **Flame Lab** | Extract image-boundary motion from a local image sequence | Overlays, motion graph, threshold sensitivity, measurements CSV |
 | **Mission Review** | Compare a hypothetical scenario and target habitat with curated evidence | Review note, exploratory study matrix, mission-transfer gap brief |
-| **NASA Evidence** | Ask questions, rank findings, and inspect NASA sources | Bounded synthesis, mission lenses, filtered evidence cards |
+| **NASA Evidence** | Inspect 129 original records, filter conditions, ask questions, and inspect sources | Descriptive plot, full source records, exports with provenance, ranked findings |
 
 ## Run it
 
@@ -47,6 +47,10 @@ For an optional local HTTP server, run `python -m http.server 8000` from the pro
 Images are limited to 10 MB each, 4096 pixels per side, and 12 megapixels. Confirm timing, scale, exposure, camera stability, and region selection before interpreting the extracted motion.
 
 ## What works
+
+- **NASA experiment explorer:** 129 original BASS-II records from [PSI-25, DOI 10.60555/4qc4-de67](https://doi.org/10.60555/4qc4-de67). Filter by investigator, material/test text, and initial oxygen; inspect all 17 source fields; export selected records with DOI, file version, and source hash. The plot includes only exact numeric final CO readings. One censored, three non-numeric status, and five missing/none entries remain visible and are never replaced with zero. See [data provenance](data/PROVENANCE.md).
+
+The calibrated initial oxygen values in this table span **13.6–22.2%**, refining the report's approximate 14–21% overview. Mission range checks now use that recorded envelope, while explicitly noting that different configurations contribute to it and no matched-run coverage or safety boundary is implied.
 
 - **Flame Motion Lab:** import 2–60 local experiment images; average intensity over a selected band; track a left/right image boundary; fit motion over time; inspect threshold sensitivity and frame overlays; export CSV with source, timing, calibration, and settings. A labeled synthetic example demonstrates the method. No NASA image sequence is bundled and no NASA measurement accuracy is claimed.
 
@@ -79,6 +83,7 @@ Run the calculation checks with Node.js:
 
 ```sh
 node checks/flame-core.cjs
+node checks/bass-data.cjs
 ```
 
 Checks cover interpolated boundaries, missing detections, clipping, band averaging, insufficient/constant fits, and recovery of exactly **3 px/s** from generated translated images.
@@ -86,6 +91,8 @@ Checks cover interpolated boundaries, missing detections, clipping, band averagi
 Native Chrome checks confirmed the built-in demo produces **6.000 px/s**, **12/12 usable frames**, and **R² = 1.000**, with overlays and sensitivity traces rendered. Workspace switching and example-question updates were exercised. A 390-pixel mobile DOM check found no overflowing main-content elements.
 
 These checks establish behavior on generated input, not accuracy on NASA experiments. A complete imported-file, download, and mission-preset walkthrough remains to be completed.
+
+The dataset check verifies the unchanged CSV's SHA-256, 129 unique investigator/test records, 17 source fields, six investigators, the oxygen envelope, and explicit handling of censored/status/missing values. The newly added experiment explorer has passed syntax/data checks; its browser interaction walkthrough is still pending because Computer Use stopped when it could not confidently identify Chrome's current URL.
 
 ## Data and limits
 
@@ -102,6 +109,9 @@ NASA's Physical Sciences Informatics repository is the planned pathway for expan
 - `flame-lab.js`, `flame-lab.css` — independent offline image-processing workbench
 - `workspace.js`, `workspace.css` — workspace navigation, responsive app presentation, focus states, and empty/result layouts
 - `checks/flame-core.cjs` — calculation verification
+- `bass-data.js`, `experiment-data.js`, `experiment-data.css` — original-record explorer and lossless data classification
+- `data/PSI-25_Experimental-table_BASS-II.csv`, `data/PROVENANCE.md` — unchanged NASA table, DOI, license, and source hash
+- `scripts/import-bass.py`, `checks/bass-data.cjs` — reproducible dataset import and integrity checks
 - `submission-copy.md` — draft submission fields and demo script
 
 ## Next technical milestones

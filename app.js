@@ -1,5 +1,7 @@
 (() => {
   const evidence = window.FIRELINE_EVIDENCE || [];
+  const oxygenEnvelope=window.FIRELINE_DATA?.meta.oxygenRange || [14,21];
+  const envelopeSource='Recorded initial oxygen envelope: NASA PSI-25 experimental table, file version 1, DOI 10.60555/4qc4-de67. This spans heterogeneous tests and does not establish joint-condition coverage. https://psi.nasa.gov/physci/repo/data/investigations/PSI-25';
   const input = document.querySelector('#question-input');
   const askButton = document.querySelector('#ask-button');
   const filter = document.querySelector('#evidence-filter');
@@ -85,6 +87,10 @@
   }
   const scenarioForm = document.querySelector('#scenario-form');
   const oxygenSlider = document.querySelector('#scenario-o2');
+  oxygenSlider.step='0.1';
+  const rangeLabels=document.querySelectorAll('.range-scale span');
+  rangeLabels[0].textContent=`${oxygenEnvelope[0]}% · recorded low`;
+  rangeLabels[1].textContent=`${oxygenEnvelope[1]}% · recorded high`;
   const oxygenOutput = document.querySelector('#o2-output');
   const knownFuels = new Set(['opposed-thick-slab','concurrent-rod','thin-slab','fabric','sphere']);
   const fuelNames = {
@@ -98,7 +104,7 @@
     const flow = document.querySelector('#scenario-flow').value;
     const heatPath = document.querySelector('#scenario-heatpath').value;
     const sensors = [...document.querySelectorAll('input[name="sensor"]:checked')].map(el => el.value);
-    const oxygenInBand = oxygen >= 14 && oxygen <= 21;
+    const oxygenInBand = oxygen >= oxygenEnvelope[0] && oxygen <= oxygenEnvelope[1];
     const fuelCovered = knownFuels.has(fuel);
     const durationKnown = duration !== 'unknown';
     const heatPathKnown = heatPath !== 'unknown';
@@ -110,7 +116,7 @@
     const summary = document.querySelector('#scenario-summary');
     if (directMatch) {
       banner.className='match-banner match-direct';
-      matchTitle.textContent='BASS-II structural analogue · O₂ within study band';
+      matchTitle.textContent='Structural analogue · O₂ within recorded envelope';
       summary.textContent='The selected geometry, duration, and heat path resemble NASA’s reported window-damage event. Oxygen is within the broader BASS-II test range, but the report does not identify the oxygen level for that specific event. This is a structural analogue, not a prediction that your scenario will cause damage.';
     } else if (structuralMatch) {
       banner.className='match-banner match-partial';
@@ -128,8 +134,8 @@
     document.querySelector('#coverage-value').textContent=`${coverage} / 4 fields represented`;
     document.querySelector('#coverage-fill').style.width=`${coverage * 25}%`;
     const o2Text = oxygenInBand
-      ? `O₂ ${oxygen}% is within the report’s approximate 14–21% test band. This is evidence coverage, not a safety boundary.`
-      : `O₂ ${oxygen}% is outside the report’s approximate 14–21% test band; the BASS-II trend should not be extrapolated here.`;
+      ? `O₂ ${oxygen}% is within the ${oxygenEnvelope.join('–')}% recorded initial-oxygen envelope in NASA's 129-row experimental table. This spans different configurations; it does not establish a matched run or a safety boundary.`
+      : `O₂ ${oxygen}% is outside the ${oxygenEnvelope.join('–')}% recorded initial-oxygen envelope. Do not extrapolate the report's HRR trend to this condition.`;
     const flowText = flow === 'unknown'
       ? 'Flow is unknown. NASA reported HRR scatter across duct-flow conditions; a numeric flow match is not available in this prototype.'
       : `Flow is marked “${flow}” qualitatively. This selector is not mapped to measured BASS-II velocities, so it cannot establish a test match.`;
@@ -189,7 +195,7 @@
       return `FIRELINE ATLAS — MISSION REVIEW NOTE\nGenerated ${date}\n\nSCENARIO\nFuel / geometry: ${fuelNames[fuel]}\nInitial oxygen: ${oxygen}%\nBurn duration: ${duration}\nVentilation label: ${flow} (qualitative only)\nHeat path: ${heatPath}\nSelected channels: ${sensors.length?sensors.join(', '):'none'}\n\nEVIDENCE MATCH\n${title}\nFields represented in curated notes: ${coverage}/4\n${summary.textContent}\n\nREVIEW PROMPTS\n${prompts.map(p=>`• ${p}`).join('\n')}\n\nLIMITATION\nThis is evidence matching, not a predictive risk score, ignition probability, fire-growth model, material qualification, or substitute for spacecraft procedures. The source does not report the specific oxygen level for the window-damage case. Qualitative flow labels are not measured NASA test values.\n\nPRIMARY SOURCE\nNASA/TM-20210011385, p. 8\nhttps://ntrs.nasa.gov/citations/20210011385\n`;
     };
     document.querySelector('#download-brief').onclick=()=>{
-      const blob=new Blob([note()],{type:'text/plain;charset=utf-8'});
+      const blob=new Blob([note()+'\nDATA CONTEXT\n'+envelopeSource],{type:'text/plain;charset=utf-8'});
       const url=URL.createObjectURL(blob); const link=document.createElement('a');
       link.href=url; link.download='fireline-mission-review-note.txt'; link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
     };
@@ -212,7 +218,7 @@
     if(event)event.preventDefault();
     const o2=Number(transferO2.value),pressure=Number(transferPressure.value),gravity=Number(transferGravity.value),family=transferFamily.value;
     const axes=[
-      ['OXYGEN',o2>=14&&o2<=21?`Within the approximate 14–21% BASS-II band (${o2}%).`:`Outside the approximate 14–21% BASS-II band (${o2}%).`,o2>=14&&o2<=21],
+      ['OXYGEN',o2>=oxygenEnvelope[0]&&o2<=oxygenEnvelope[1]?`Within the ${oxygenEnvelope.join('–')}% recorded initial-oxygen envelope (${o2}%). Different configurations contribute to this envelope; no matched run is implied.`:`Outside the ${oxygenEnvelope.join('–')}% recorded initial-oxygen envelope (${o2}%).`,o2>=oxygenEnvelope[0]&&o2<=oxygenEnvelope[1]],
       ['GRAVITY',gravity===0?'Aligned with microgravity BASS-II context.':`Target is ${gravity} g; the curated BASS-II comparison does not represent this partial/normal-gravity level.`,gravity===0],
       ['PRESSURE',`Target ${pressure} psi; exact BASS-II pressure is not captured in this curated evidence note.`,false],
       ['FUEL / FLAME FAMILY',family==='solid'?'Solid-material focus aligns with BASS-II; verify actual material and geometry.':'Gaseous flame selected; BASS-II solid-fuel notes do not directly cover this family.',family==='solid']
@@ -223,7 +229,7 @@
     const list=document.querySelector('#transfer-axes');
     list.replaceChildren(...axes.map(([label,copy,covered])=>{const row=document.createElement('div');row.className='transfer-axis';const head=document.createElement('div');const strong=document.createElement('strong');strong.textContent=label;const state=document.createElement('span');state.textContent=covered?'IN CONTEXT':'EVIDENCE GAP';state.className=covered?'axis-covered':'axis-gap';head.append(strong,state);const p=document.createElement('p');p.textContent=copy;row.append(head,p);return row;}));
     document.querySelector('#download-transfer').onclick=()=>{const brief=`FIRELINE ATLAS — MISSION EVIDENCE TRANSFER BRIEF\n\nTarget: ${transferPreset.options[transferPreset.selectedIndex].text}\nOxygen: ${o2}%\nPressure: ${pressure} psi\nGravity: ${gravity} g\nEvidence family: ${family==='solid'?'solid material':'gaseous flame'}\n\n${document.querySelector('#transfer-summary').textContent}\n\nAXIS REVIEW\n${axes.map(([label,copy,covered])=>`${label} — ${covered?'IN CONTEXT':'GAP'}: ${copy}`).join('\n')}\n\nRESEARCH PRIORITY\nFind run-level NASA metadata and/or conduct a qualified, mission-matched study that isolates the uncovered axes. Measure pressure, oxygen, gravity, flow, fuel geometry, and synchronized combustion products. Partial-gravity transfer requires validation; do not interpolate these notes into a fire prediction.\n\nSource context: NASA Space Apps 2026 Flame in Freefall challenge brief; curated BASS-II summary NASA/TM-20210011385.\nhttps://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/\nhttps://ntrs.nasa.gov/citations/20210011385\n`;
-      const url=URL.createObjectURL(new Blob([brief],{type:'text/plain;charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download='fireline-mission-transfer-gap-brief.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+      const url=URL.createObjectURL(new Blob([brief+'\nDATA CONTEXT\n'+envelopeSource],{type:'text/plain;charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download='fireline-mission-transfer-gap-brief.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
   }
   transferPreset.addEventListener('change',()=>{const preset=transferPreset.value;if(preset==='lunar'){transferO2.value='30';transferPressure.value='10.2';transferGravity.value='0.16';}else if(preset==='mars'){transferGravity.value='0.38';}else if(preset==='iss'){transferO2.value='21';transferGravity.value='0';}assessTransfer();});
   transferForm.addEventListener('submit',assessTransfer);
