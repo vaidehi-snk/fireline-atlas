@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10161a">
+  <meta name="description" content="Fireline Atlas turns NASA microgravity combustion findings into traceable fire-safety evidence for human space exploration.">
+  <title>Fireline Atlas — Microgravity Fire Safety Intelligence</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./scenario.css">
+  <script defer src="./evidence.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to dashboard</a>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Fireline Atlas home">
+      <span class="brand-mark" aria-hidden="true">✳</span>
+      <span>FIRELINE <span class="brand-light">ATLAS</span></span>
+    </a>
+    <div class="top-context"><span class="live-dot"></span> NASA SPACE APPS · FLAME IN FREEFALL</div>
+    <a class="source-link" href="https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/" target="_blank" rel="noreferrer">Challenge brief <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="main" class="shell">
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow">MISSION INTELLIGENCE <span> / </span> COMBUSTION SCIENCE</p>
+        <h1>Fire behaves differently<br>when <em>gravity lets go.</em></h1>
+        <p class="hero-deck">A source-traceable evidence desk for turning decades of NASA microgravity fire research into clearer questions for crew safety on the Moon, Mars, and beyond.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#ask">Explore the evidence <span aria-hidden="true">↓</span></a>
+          <a class="text-button" href="#method">How the intelligence works <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="trust-row"><span>●</span> NASA-source linked <span class="divider">·</span> Works offline <span class="divider">·</span> No safety certification claims</div>
+      </div>
+      <div class="hero-visual" role="img" aria-label="Abstract orbital visualization of a contained flame, airflow, and evidence signals">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="orbit-label label-top">O₂ / AIR MIX</div><div class="orbit-label label-side">FLOW ↗</div>
+        <div class="flame-core"><span class="flame-glyph">✦</span><span class="core-caption">MICROGRAVITY<br>CHANGES THE FLOW</span></div>
+        <span class="signal signal-a"></span><span class="signal signal-b"></span><span class="signal signal-c"></span>
+        <div class="visual-foot"><span>01</span> EVIDENCE BEFORE ASSUMPTION</div>
+      </div>
+    </section>
+
+    <section class="stat-row" aria-label="Project scope">
+      <div class="stat"><span class="stat-value" id="evidence-count">08</span><span class="stat-label">curated NASA findings</span></div>
+      <div class="stat"><span class="stat-value">03</span><span class="stat-label">mission lenses</span></div>
+      <div class="stat"><span class="stat-value">01</span><span class="stat-label">trace for every claim</span></div>
+      <div class="stat-note">A focused prototype built around the BASS-II evidence base. More PSI investigations can be added without changing the workflow.</div>
+    </section>
+
+    <section id="workbench" class="section-block workbench-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">01 <span>/</span> MISSION SCENARIO WORKBENCH</p><h2>Build a fire scenario. Find its evidence analogue.</h2></div>
+        <span class="section-aside">CONDITION MATCH · NOT A RISK SCORE</span>
+      </div>
+      <p class="workbench-intro">Describe a hypothetical materials-fire case. Fireline checks it against reported BASS-II conditions, spots where the evidence is thin, and builds a review note your team can use in a design discussion.</p>
+      <div class="workbench-layout">
+        <form id="scenario-form" class="scenario-form">
+          <div class="scenario-field"><label for="scenario-fuel">FUEL / GEOMETRY</label><select id="scenario-fuel"><option value="opposed-thick-slab">Opposed-flow thick slab</option><option value="concurrent-rod">Concurrent-flow rod</option><option value="thin-slab">Thin slab</option><option value="fabric">Cotton-fiberglass fabric</option><option value="sphere">Spherical section</option><option value="other">Other / not represented</option></select></div>
+          <div class="scenario-field"><label for="scenario-o2">INITIAL OXYGEN <output id="o2-output" for="scenario-o2">21%</output></label><input id="scenario-o2" type="range" min="10" max="25" step="0.5" value="21"><div class="range-scale"><span>14% · low test edge</span><span>21% · ambient</span><span>25% · outside BASS-II band</span></div></div>
+          <div class="scenario-field"><label for="scenario-duration">BURN DURATION</label><select id="scenario-duration"><option value="prolonged">Prolonged / sustained</option><option value="brief">Brief / transient</option><option value="unknown">Unknown</option></select></div>
+          <div class="scenario-field"><label for="scenario-flow">VENTILATION / FLOW</label><select id="scenario-flow"><option value="unknown">Unknown</option><option value="low">Low forced flow</option><option value="moderate">Moderate forced flow</option><option value="high">High forced flow</option></select><small>Qualitative selector; not a measured velocity.</small></div>
+          <div class="scenario-field"><label for="scenario-heatpath">HEAT PATH TO HARDWARE</label><select id="scenario-heatpath"><option value="directed">Directed toward nearby hardware / leak path</option><option value="clear">No direct path identified</option><option value="unknown">Unknown</option></select></div>
+          <fieldset class="sensor-field"><legend>OBSERVED CHANNELS</legend><label><input type="checkbox" name="sensor" value="O₂" checked> O₂</label><label><input type="checkbox" name="sensor" value="CO"> CO</label><label><input type="checkbox" name="sensor" value="CO₂"> CO₂</label></fieldset>
+          <button class="button button-primary scenario-submit" type="submit">Analyze scenario <span aria-hidden="true">↗</span></button>
+        </form>
+        <article id="scenario-result" class="scenario-result" aria-live="polite">
+          <div class="scenario-result-top"><span class="answer-kicker"><span class="answer-icon">◎</span> EVIDENCE MATCH REPORT</span><span class="not-score">NO PREDICTIVE SCORE</span></div>
+          <div class="match-banner match-direct" id="match-banner"><span class="match-icon">!</span><div><span class="match-label">CLOSEST STRUCTURAL ANALOGUE</span><strong id="match-title">BASS-II · opposed thick slab · prolonged burn</strong></div></div>
+          <p id="scenario-summary" class="scenario-summary">Your selected geometry, duration, and heat path resemble NASA's reported window-damage event. Oxygen is within the broader BASS-II range; the report does not identify the oxygen level for that specific event.</p>
+          <div class="coverage-row"><span>FIELDS REPRESENTED IN CURATED NOTE</span><strong id="coverage-value">4 / 4 fields represented</strong></div>
+          <div class="coverage-track"><span id="coverage-fill"></span></div>
+          <div id="scenario-findings" class="scenario-findings"></div>
+          <div class="review-actions"><p class="lens-label">REVIEW PROMPTS</p><ul id="review-prompts"></ul></div>
+          <div class="scenario-result-bottom"><a href="https://ntrs.nasa.gov/api/citations/20210011385/downloads/TM-20210011385.pdf" target="_blank" rel="noreferrer">NASA/TM-20210011385 · p. 8 ↗</a><button type="button" id="download-brief" class="download-button">Download review note ↓</button></div>
+          <p class="scenario-disclaimer">Evidence matching supports discussion only. It does not estimate ignition probability, predict fire growth, or replace spacecraft procedures.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ask" class="section-block intelligence-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">02 <span>/</span> ASK THE EVIDENCE</p><h2>What does the research actually say?</h2></div>
+        <span class="section-aside">SOURCE-RANKED · EXPLAINABLE</span>
+      </div>
+      <div class="question-panel">
+        <label for="question-input">MISSION QUESTION</label>
+        <div class="question-entry"><span aria-hidden="true" class="search-icon">⌕</span><input id="question-input" type="search" autocomplete="off" value="Can heat release rate alone tell us if a fire is dangerous?" placeholder="Ask about oxygen, airflow, heat, geometry, smoke…"><button id="ask-button" class="button button-primary">Synthesize <span aria-hidden="true">↗</span></button></div>
+        <div class="prompt-row" aria-label="Example mission questions">
+          <button class="prompt-chip" data-prompt="What changes as oxygen concentration rises?">Oxygen & heat</button>
+          <button class="prompt-chip" data-prompt="How do fuel geometry and airflow affect fire behavior?">Geometry & airflow</button>
+          <button class="prompt-chip" data-prompt="What should a crew monitor during a prolonged burn?">Crew monitoring</button>
+        </div>
+      </div>
+      <div class="answer-layout">
+        <article id="answer-card" class="answer-card" aria-live="polite">
+          <div class="answer-kicker"><span class="answer-icon">✳</span> FIRELINE SYNTHESIS <span class="answer-confidence">EVIDENCE-BOUNDED</span></div>
+          <h3 id="answer-title">The wattage is not the whole story.</h3>
+          <p id="answer-text">NASA’s BASS-II report describes a prolonged opposed thick-slab burn near 100 W that damaged a window corner, while a briefer concurrent-rod burn near 110 W did not. The contrast suggests duration, geometry, and heat path matter alongside heat-release rate. Two examples do not establish a universal threshold.</p>
+          <div class="answer-bottom"><span id="result-count">2 findings ranked for this question</span><span class="score-legend">Ranking = topic match + evidence strength + mission relevance</span></div>
+        </article>
+        <aside class="mission-lens">
+          <p class="eyebrow">MISSION LENS</p>
+          <label class="select-wrap" for="mission-select"><span class="sr-only">Choose mission lens</span>
+            <select id="mission-select"><option value="habitat">Crew habitat / long-duration burn</option><option value="suppression">Fire detection & suppression</option><option value="materials">Material screening & ignition</option></select>
+          </label>
+          <div class="lens-divider"></div>
+          <p class="lens-label">WHY THIS MATTERS</p>
+          <p id="lens-text">A short peak and a long exposure can load hardware differently. Treat duration, geometry, and heat pathways as separate decision variables.</p>
+          <div class="lens-tags"><span>CONTEXT</span><span>NOT A VERDICT</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section-block compare-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">03 <span>/</span> A COUNTERINTUITIVE SIGNAL</p><h2>More watts. Less damage.</h2></div>
+        <p class="section-intro">Two reported BASS-II cases challenge a single-number safety shortcut. The values are approximate report findings, not a new threshold model.</p>
+      </div>
+      <div class="compare-grid">
+        <article class="case-card case-alert">
+          <div class="case-top"><span class="case-id">CASE A <span>·</span> PROLONGED</span><span class="case-symbol">!</span></div>
+          <div class="case-number">≈100<span> W</span></div>
+          <div class="bar-track"><div class="bar-fill fill-one"></div></div>
+          <h3>Opposed thick slab</h3>
+          <p>Prolonged burn; a leak directed heat to the downstream window corner, where damage occurred.</p>
+          <a class="case-cite" href="https://ntrs.nasa.gov/api/citations/20210011385/downloads/TM-20210011385.pdf" target="_blank" rel="noreferrer">NASA/TM-20210011385 · p. 8 ↗</a>
+        </article>
+        <div class="compare-center"><span>VS</span><p>HRR alone<br>misses context</p><svg viewBox="0 0 72 20" aria-hidden="true"><path d="M2 10h64m-8-7 8 7-8 7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <article class="case-card case-calm">
+          <div class="case-top"><span class="case-id">CASE B <span>·</span> BRIEF</span><span class="case-symbol">↗</span></div>
+          <div class="case-number">≈110<span> W</span></div>
+          <div class="bar-track"><div class="bar-fill fill-two"></div></div>
+          <h3>Concurrent rod</h3>
+          <p>Relatively brief burn; the report says this higher estimated HRR did not cause damage.</p>
+          <a class="case-cite" href="https://ntrs.nasa.gov/api/citations/20210011385/downloads/TM-20210011385.pdf" target="_blank" rel="noreferrer">NASA/TM-20210011385 · p. 8 ↗</a>
+        </article>
+      </div>
+      <div class="takeaway"><span class="takeaway-mark">↳</span><p><strong>Design implication:</strong> assess heat-release rate with burn duration, fuel geometry, ventilation, and the path to nearby hardware. The report attributes this damage case to prolonged heating and a leak, not wattage alone.</p></div>
+    </section>
+
+    <section class="section-block evidence-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">04 <span>/</span> EVIDENCE LIBRARY</p><h2>Findings you can follow back.</h2></div>
+        <div class="filter-wrap"><label for="evidence-filter">FILTER</label><select id="evidence-filter"><option value="all">All findings</option><option value="fire-load">Fire growth</option><option value="atmosphere">Atmosphere</option><option value="materials">Materials & flow</option><option value="monitoring">Monitoring</option><option value="data">NASA data access</option></select></div>
+      </div>
+      <div class="evidence-toolbar"><span id="evidence-results-label">08 EVIDENCE NOTES</span><span>Sorted by relevance to your question</span></div>
+      <div id="evidence-grid" class="evidence-grid"></div>
+      <p id="empty-state" class="empty-state" hidden>No evidence notes match that filter. Try another mission question or filter.</p>
+    </section>
+
+    <section id="method" class="section-block method-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">05 <span>/</span> HOW THE SI WORKS</p><h2>Intelligence you can inspect.</h2></div>
+        <span class="section-aside">NO BLACK-BOX RISK SCORE</span>
+      </div>
+      <div class="method-grid">
+        <article class="method-step"><span>01</span><h3>Retrieve</h3><p>Search the curated evidence notes using topic terms and their combustion-science synonyms.</p></article>
+        <article class="method-step"><span>02</span><h3>Rank</h3><p>Score topic match, NASA source tier, and mission-lens relevance. Each note shows its evidence type.</p></article>
+        <article class="method-step"><span>03</span><h3>Explain</h3><p>Build a concise synthesis from the highest-ranked findings and expose the caveat beside the claim.</p></article>
+        <article class="method-step method-limit"><span>!</span><h3>Bound the claim</h3><p>This prototype summarizes published findings. It does not ingest every PSI file, predict fire behavior, or replace NASA material qualification and crew procedures.</p></article>
+      </div>
+      <div class="provenance-note"><span class="provenance-icon">◎</span><p><strong>Provenance first.</strong> Every evidence note links to the NASA report or NASA science page it summarizes. PSI is the pathway for expanding this prototype with investigation-level raw and analyzed data.</p><a href="https://psi.nasa.gov/physci/repo" target="_blank" rel="noreferrer">Open NASA PSI ↗</a></div>
+    </section>
+
+    <section class="sources-strip" aria-label="Primary sources">
+      <div><p class="eyebrow">PRIMARY SOURCES</p><h2>Built from NASA research.</h2></div>
+      <a href="https://ntrs.nasa.gov/citations/20210011385" target="_blank" rel="noreferrer"><span>01</span><strong>BASS-II technical report</strong><small>NASA/TM-20210011385 · NTRS</small><b>↗</b></a>
+      <a href="https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/" target="_blank" rel="noreferrer"><span>02</span><strong>NASA combustion science</strong><small>BASS, FLEX, Saffire, SoFIE</small><b>↗</b></a>
+      <a href="https://www.nasa.gov/physical-sciences-informatics-psi/psi-investigations-by-research-area/" target="_blank" rel="noreferrer"><span>03</span><strong>PSI investigations</strong><small>Combustion Science collection</small><b>↗</b></a>
+    </section>
+
+    <footer class="footer"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">✳</span><span>FIRELINE <span class="brand-light">ATLAS</span></span></a><span>NASA Space Apps Challenge · 2026</span><span>Evidence-led. Crew-focused. Open to scrutiny.</span></footer>
+  </main>
+</body>
+</html>
