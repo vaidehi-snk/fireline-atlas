@@ -5,6 +5,8 @@ An offline-ready, source-traceable evidence dashboard for microgravity fire-safe
 
 ## Run it
 
+The interface has three workspaces: **Flame Lab**, **Mission Review**, and **NASA Evidence**. Start with the synthetic method demo in Flame Lab, or bring a calibrated experiment image sequence. Workspace navigation supports keyboard arrows and direct links; all analysis stays on the device.
+
 Open `index.html` in a modern browser. The dashboard and question ranking run locally; source links open NASA pages when online. No build step, API key, sign-in, or server is required.
 
 ## What works
@@ -35,6 +37,7 @@ NASA's Physical Sciences Informatics repository is the planned pathway for expan
 - `evidence.js` — traceable, curated evidence notes
 - `app.js` — local retrieval, ranking, synthesis, and filters
 - `flame-lab.js`, `flame-lab.css` — independent offline image-processing workbench
+- `workspace.js`, `workspace.css` — workspace navigation, responsive app presentation, focus states, and empty/result layouts
 - `submission-copy.md` — draft submission fields and demo script
 
 ## Submission checklist

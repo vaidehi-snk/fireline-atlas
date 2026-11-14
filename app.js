@@ -180,7 +180,9 @@
     const list=document.querySelector('#review-prompts'); list.replaceChildren(...prompts.map(copy=>{const li=document.createElement('li');li.textContent=copy;return li;}));
     const query=[fuelNames[fuel], `${oxygen}% oxygen`, duration, flow, heatPath, ...sensors].join(' ');
     const scenarioRanked=rank(query,lensSelect.value).slice(0,3);
-    scenarioRanked.forEach(({item,value,hits})=>findings.append(makeCard({item,value,hits})));
+    const sourceDetails=document.createElement('details');sourceDetails.className='scenario-sources';
+    const sourceSummary=document.createElement('summary');sourceSummary.textContent=`Inspect ${scenarioRanked.length} matching NASA findings`;sourceDetails.append(sourceSummary);
+    scenarioRanked.forEach(({item,value,hits})=>sourceDetails.append(makeCard({item,value,hits})));findings.append(sourceDetails);
     const note = () => {
       const title=directMatch?'Structural analogue; oxygen in broad test band':structuralMatch?'Structural analogue; oxygen outside test band':coverage>=3?'Related conditions; no direct match':'Evidence coverage gap';
       const date=new Date().toISOString().slice(0,10);

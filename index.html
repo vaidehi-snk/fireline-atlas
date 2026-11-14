@@ -12,6 +12,8 @@
   <script defer src="./app.js"></script>
   <script defer src="./flame-lab.js"></script>
   <link rel="stylesheet" href="./flame-lab.css">
+  <link rel="stylesheet" href="./workspace.css">
+  <script defer src="./workspace.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to dashboard</a>
@@ -28,8 +30,8 @@
     <section class="hero" id="top">
       <div class="hero-copy">
         <p class="eyebrow">MISSION INTELLIGENCE <span> / </span> COMBUSTION SCIENCE</p>
-        <h1>Fire behaves differently<br>when <em>gravity lets go.</em></h1>
-        <p class="hero-deck">A source-traceable evidence desk for turning decades of NASA microgravity fire research into clearer questions for crew safety on the Moon, Mars, and beyond.</p>
+        <h1>From flame images <br>to <em>traceable evidence.</em></h1>
+        <p class="hero-deck">Measure optical motion. Inspect NASA findings. Map what still needs testing for the next habitat.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="#ask">Explore the evidence <span aria-hidden="true">↓</span></a>
           <a class="text-button" href="#method">How the intelligence works <span aria-hidden="true">↗</span></a>
@@ -52,6 +54,10 @@
       <div class="stat-note">A focused prototype built around the BASS-II evidence base. More PSI investigations can be added without changing the workflow.</div>
     </section>
 
+    <nav class="workspace-nav" aria-label="Research workspaces">
+      <div class="workspace-tabs"><button type="button" data-workspace="lab" aria-pressed="true"><span>01</span> Flame Lab</button><button type="button" data-workspace="mission" aria-pressed="false"><span>02</span> Mission Review</button><button type="button" data-workspace="evidence" aria-pressed="false"><span>03</span> NASA Evidence</button></div><span class="workspace-local"><i aria-hidden="true"></i> Local workspace</span>
+    </nav>
+    <div class="workspace-context"><p id="workspace-description">Start with a method demo, or import experiment images with confirmed timing and calibration.</p><span>RESEARCH PROTOTYPE</span></div>
     <section id="flame-lab" class="section-block flame-lab">
       <div class="section-heading"><div><p class="eyebrow">RESEARCH TOOL / IMAGE → MEASUREMENT</p><h2>Turn flame images into motion evidence.</h2></div><span class="section-aside">LOCAL IMAGE ANALYSIS</span></div>
       <p class="lab-intro">Load a time-ordered image sequence. Track an intensity boundary, inspect its sensitivity to the threshold, and export reproducible measurements. NASA's BASS-II report uses image-intensity profiles to study flame spread; this independent prototype makes that idea explorable.</p>

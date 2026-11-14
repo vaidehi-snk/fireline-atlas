@@ -38,6 +38,10 @@
   if(typeof document==='undefined')return;
   const $=id=>document.getElementById(id);
   const form=$('lab-form');if(!form)return;
+  form.insertBefore($('lab-demo'),form.firstChild);
+  const empty=document.createElement('div');empty.className='lab-empty';
+  empty.innerHTML='<div class="lab-empty-mark" aria-hidden="true">⌁</div><h3>Your next measurement starts here.</h3><p>Try the synthetic method demo to see the workflow, or load a sequence from an experiment.</p><span>IMAGES → BOUNDARIES → MOTION → CSV</span>';
+  document.querySelector('.lab-results').insertBefore(empty,$('lab-metrics'));
   let frames=[],demo=false,results=[],settings=null,busy=false,previewSerial=0;
   const status=message=>{$('lab-status').textContent=message;};
   function synthetic(index){
@@ -51,6 +55,7 @@
   function stale(){if(busy)return;$('lab-export').disabled=true;status('Inputs changed. Extract again to refresh measurements and exports.');}
   form.addEventListener('input',event=>{if(event.target.id!=='lab-files')stale();});
   $('lab-files').addEventListener('change',()=>{
+    document.querySelector('.lab-results').classList.remove('has-measurements');
     $('lab-export').disabled=true;results=[];$('lab-frame').disabled=true;
     const selected=[...$('lab-files').files];
     if(selected.length<2||selected.length>60){status('Choose between 2 and 60 images.');frames=[];return;}
@@ -80,7 +85,7 @@
   }
   form.addEventListener('submit',async event=>{
     event.preventDefault();if(busy)return;if(frames.length<2){status('Load at least two experiment frames, or try the synthetic method demo.');return;}
-    settings=readSettings();if(!form.reportValidity())return;busy=true;results=[];$('lab-export').disabled=true;[...form.elements].forEach(el=>el.disabled=true);
+    settings=readSettings();if(!form.reportValidity())return;busy=true;results=[];document.querySelector('.lab-results').classList.remove('has-measurements');$('lab-export').disabled=true;[...form.elements].forEach(el=>el.disabled=true);
     try{
       let width=null,height=null;
       for(let i=0;i<frames.length;i++){
@@ -98,9 +103,9 @@
       $('lab-metrics').replaceChildren(metric('IMAGE-BOUNDARY VELOCITY',fitted?`${(fitted.slope/divisor).toFixed(3)} ${unit}`:'Insufficient data'),metric('USABLE / TOTAL FRAMES',`${fitted?.n||0} / ${frames.length}`),metric('LINEAR FIT R²',fitted?.r2!==null&&fitted?fitted.r2.toFixed(3):'Undefined'));
       const spread=sensitivities.length===2?`Threshold sensitivity: fitted velocities ${sensitivities.map(f=>(f.slope/divisor).toFixed(3)).join(' to ')} ${unit}. `:'Threshold sensitivity could not be fitted at both levels. ';
       $('lab-interpretation').textContent=spread+'The two threshold variants are processing sensitivity, not statistical uncertainty. Missing and image-border-clipped detections are excluded from velocity fits. Signed velocity follows the image x axis. Camera motion, exposure changes, and bright hardware may bias this extraction.';
-      $('lab-frame').max=String(frames.length-1);$('lab-frame').value='0';$('lab-frame').disabled=false;chart();await preview(0);
+      $('lab-frame').max=String(frames.length-1);$('lab-frame').value='0';$('lab-frame').disabled=false;document.querySelector('.lab-results').classList.add('has-measurements');chart();await preview(0);
       $('lab-export').disabled=false;status(`${demo?'SYNTHETIC DEMO — no NASA observations. ':''}${frames.length} frames analyzed. ${results.filter(r=>!r.front).length} missing and ${results.filter(r=>r.front?.clipped).length} border-clipped detections. ${settings.scale?'User-supplied spatial calibration.':'Uncalibrated: pixel units.'}`);
-    }catch(error){results=[];$('lab-metrics').replaceChildren();$('lab-chart').replaceChildren();$('lab-frame').disabled=true;status(`Analysis stopped: ${error.message}`);}
+    }catch(error){results=[];document.querySelector('.lab-results').classList.remove('has-measurements');$('lab-metrics').replaceChildren();$('lab-chart').replaceChildren();$('lab-frame').disabled=true;status(`Analysis stopped: ${error.message}`);}
     finally{busy=false;[...form.elements].forEach(el=>el.disabled=false);}
   });
   $('lab-frame').addEventListener('input',()=>preview(Number($('lab-frame').value)).catch(error=>status(error.message)));
