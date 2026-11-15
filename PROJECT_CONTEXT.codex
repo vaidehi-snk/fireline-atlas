@@ -2,6 +2,12 @@
 
 Updated: 2026-11-15. This is the current project state; it replaces the earlier handoff with superseded feature and validation descriptions.
 
+## Submission release · 15 November 2026
+
+Public project: https://vaidehi-snk.github.io/fireline-atlas/
+Public demonstration: https://vaidehi-snk.github.io/fireline-atlas/demo.html
+The 25.875 s MP4 includes English synthetic narration, on-screen captions, real NASA images and product views. The selection of original B1 frames is edited for time. Results of the hash-verified, non-blinded original-video spot check are in clip-spot-check.md. B7 is lighting-sensitive. Independent teammate notes are pending. The submission copy contains the two public links. Team details, final portal submission and applicable deadline require the team’s action. This release supersedes earlier planning notes below about pending hosting and demo production.
+
 ## Start here
 
 Fireline Atlas is a NASA Space Apps 2026 research prototype for **Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data**. The working idea is an inspectable path from NASA experiment records to image measurements, research context, and mission-specific evidence gaps.

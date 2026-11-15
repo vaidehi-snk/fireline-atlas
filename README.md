@@ -1,5 +1,7 @@
 # Fireline Atlas
 
+[Open Fireline Atlas](https://vaidehi-snk.github.io/fireline-atlas/) · [Watch the narrated demo](https://vaidehi-snk.github.io/fireline-atlas/demo.html) · [Original-clip spot check](clip-spot-check.md)
+
 [Complete project handoff and continuation plan](PROJECT_CONTEXT.codex)
 
 **NASA Space Apps Challenge 2026 · Flame in Freefall**  

@@ -11,7 +11,7 @@ function parseCSV(text){const rows=[];let row=[],value='',quoted=false;for(let i
  const pass=name=>checks.push(name);
  async function download(locator,name){const waiting=page.waitForEvent('download');await locator.click();const file=await waiting;const destination=path.join(out,name);await file.saveAs(destination);return fs.readFile(destination);}
  try{
-  await page.goto(pathToFileURL(path.join(root,'index.html')).href);
+  await page.goto(process.env.FIRELINE_TEST_URL || pathToFileURL(path.join(root,'index.html')).href);
   await page.locator('#lab-nasa').click();
   await page.waitForFunction(()=>document.getElementById('lab-status').textContent.includes('11 frames analyzed'));
   assert.equal(await page.locator('#lab-case-info').isVisible(),true);

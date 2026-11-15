@@ -10,11 +10,11 @@ Fireline Atlas connects actual NASA flame imagery, 129 original BASS-II experime
 
 ## Link to project demo
 
-To be added after the demo is recorded and hosted publicly.
+https://vaidehi-snk.github.io/fireline-atlas/demo.html
 
 ## Link to final project
 
-To be added after Fireline Atlas is deployed to a public static host.
+https://vaidehi-snk.github.io/fireline-atlas/
 
 ## Detailed project description
 
