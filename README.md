@@ -156,4 +156,4 @@ NASA's Physical Sciences Informatics repository is the planned pathway for expan
 
 ## Submission status
 
-The public project, credited 26.79-second demo and [submission copy](submission-copy.md) are ready. The team still needs to verify participant eligibility, submit the required fields in its account and check the judging confirmation banner. Independent teammate review of the three clips remains optional.
+The public project, credited 26-second demo and [submission copy](submission-copy.md) are ready. The team still needs to verify participant eligibility, submit the required fields in its account and check the judging confirmation banner. Independent teammate review of the three clips remains optional.

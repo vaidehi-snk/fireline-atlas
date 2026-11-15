@@ -6,7 +6,7 @@ Updated: 2026-11-15. This is the current project state; it replaces the earlier 
 
 Public project: https://vaidehi-snk.github.io/fireline-atlas/
 Public demonstration: https://vaidehi-snk.github.io/fireline-atlas/demo.html
-The 26.79 s MP4 includes English synthetic narration, on-screen captions, real NASA images and product views. The selection of original B1 frames is edited for time. Results of the hash-verified, non-blinded original-video spot check are in clip-spot-check.md. B7 is lighting-sensitive. Independent teammate notes are pending. The submission copy contains the two public links. MicroFire Tech · Group members: Vaidehi Kakad and Niraj Khetre. Final portal submission and applicable deadline require the team’s action. The release and credits are published on GitHub Pages.
+The 26.0 s MP4 (replaced 15 November) follows one test, B1: NASA flight footage, the empty outcome cell in NASA’s table, the camera and radiometer traces, the oxygen–airflow map and the 30% Moon-base gap. Narration is an AI-generated Fish Audio voice (names spoken with phoneme tags), with English captions; the end card, demo page and MP4 metadata disclose the AI voice and SI-assisted edit. The film was built in HyperFrames from the repository data; its project is kept outside this repository. Results of the hash-verified, non-blinded original-video spot check are in clip-spot-check.md. B7 is lighting-sensitive. Independent teammate notes are pending. The submission copy contains the two public links. MicroFire Tech · Group members: Vaidehi Kakad and Niraj Khetre. Final portal submission and applicable deadline require the team’s action. The release and credits are published on GitHub Pages.
 
 ## Start here
 
@@ -149,7 +149,7 @@ Optional: install playwright-core, set FIRELINE_CHROME if Chrome is elsewhere, r
 
 ## Submission status and optional research roadmap
 
-The feature freeze, source-file integrity check, public hosting, 26.79-second credited demo, submission copy and three-clip visual spot check are complete. Both group members must confirm their eligibility at the same Local Event. Complete the English portal fields, review the terms and originality declarations, select **Submit for Judging**, and verify the success banner. No portal confirmation is on record here.
+The feature freeze, source-file integrity check, public hosting, 26-second credited demo, submission copy and three-clip visual spot check are complete. Both group members must confirm their eligibility at the same Local Event. Complete the English portal fields, review the terms and originality declarations, select **Submit for Judging**, and verify the success banner. No portal confirmation is on record here.
 
 Independent teammate notes on B1, B7 and B8 remain an optional follow-up to the non-blinded spot check. The items below are longer-term research work and do not gate this release.
 
