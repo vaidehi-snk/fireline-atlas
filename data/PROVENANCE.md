@@ -37,3 +37,7 @@ These are optical observations in video pixels and video seconds. They are not c
 The oxygen–airflow map uses “Calibrated initial O2 % by vol” and “Air display” from the original table. Only a single numeric reading on both axes qualifies. Air display is duct speed in cm/s and the NASA readme gives a response time of approximately one minute. Points describe whole-test metadata. They do not establish instantaneous airflow when a signal disappeared. The 30% line is the challenge’s lunar oxygen scenario.
 
 Derived observations (15 November 2026) use elapsed video seconds. Each sustained period contributes its last minus first sample time. Short flicker gaps up to one second can be merged. Radiometer agreement requires measured samples bracketing the final downward half-level crossing within six seconds of optical loss. Missing late readings leave the crossing unresolved. The half-level, timing tolerance and optical thresholds are Fireline analysis choices. Masked work-light frames and nonlive frames are excluded throughout the summaries and plots. The underlying traces retain the original per-frame values. No physical extinction labels have been independently validated.
+
+## AI assistance
+
+The scripts that produce every derived file described here were written with AI coding assistants and reviewed by the team. NASA source files are kept unchanged. See "How AI was used" in the README.

@@ -504,7 +504,9 @@ def bundle(records):
                       f'present at >= {MIN_AREA} px, sustained >= {MIN_RUN} s, flicker gaps <= {MAX_GAP} s merged. '
                       f'Sampled at {FPS} frames/s. Overlay readings (fan, radiometer, clock) read by template matching.',
             'limits': 'Image pixels and video seconds, not calibrated flame-spread rates. A dim blue flame can fall below '
-                      'the camera threshold; the radiometer check flags those tests.'}
+                      'the camera threshold; the radiometer check flags those tests.',
+            'ai_assistance': 'This script and the measurements it derives were prepared with AI coding assistants and '
+                             'reviewed by the team. NASA source videos are not modified.'}
     (ROOT / 'video-data.js').write_text('window.FIRELINE_VIDEO = ' + json.dumps({'meta': meta, 'tests': tests},
                                         separators=(',', ':')) + ';\n', encoding='utf-8')
 
