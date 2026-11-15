@@ -13,9 +13,9 @@ An offline-ready, source-traceable evidence dashboard for microgravity fire-safe
 | --- | --- |
 | Source code | Public repository; active research prototype |
 | Local app | Works directly from `index.html`; no build, API key, or sign-in |
-| Hosted demo | Not yet deployed or verified |
+| Hosted demo | Public GitHub Pages app and narrated demo verified |
 | Image analysis | Local processing, frame inspection, and CSV export implemented |
-| Verification | Real NASA B3 contact-sheet case and 13 browser checks pass; independent physical measurement accuracy remains unvalidated |
+| Verification | Real NASA B3 contact-sheet case and 15 browser checks pass; independent physical measurement accuracy remains unvalidated |
 | Flight video outcomes | NASA BASS-II flight videos read per test: visible flame window, fan and radiometer readings, radiometer cross-check |
 
 Built for [Flame in Freefall](https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/): an interactive dashboard that summarizes, ranks, and interprets microgravity combustion research for human space exploration.
@@ -100,7 +100,7 @@ Native Chrome checks confirmed the built-in demo produces **6.000 px/s**, **12/1
 
 The dataset checks verify source hashes, record identity, fields, quality handling, all 11 NASA image hashes/dimensions, the photo clocks and regression with unequal time gaps.
 
-Automated checks in a separate headless Chrome profile now pass **13 browser checks** covering the real B3 case, frame inspection, unequal-timestamp CSV export, source-record linkage, all 129 records/120 plotted observations, empty and invalid filters, data exports, byte-identical source download, lunar/ISS/Mars preset updates, question prompts, mobile layouts and no uncaught page errors. See [QA report](data/browser-checks.json). Manual imports and all failure branches still need broader coverage.
+Automated checks in a separate headless Chrome profile now pass **15 browser checks** covering the real B3 case, frame inspection, unequal-timestamp CSV export, source-record linkage, all 129 records/120 plotted observations, empty and invalid filters, data exports, byte-identical source download, lunar/ISS/Mars preset updates, question prompts, mobile layouts and no uncaught page errors. See [QA report](data/browser-checks.json). Manual imports and all failure branches still need broader coverage.
 
 To reproduce browser QA with an installed Chrome:
 
@@ -137,7 +137,7 @@ NASA's Physical Sciences Informatics repository is the planned pathway for expan
 - `bass-data.js`, `experiment-data.js`, `experiment-data.css` — original-record explorer and lossless data classification
 - `data/PSI-25_Experimental-table_BASS-II.csv`, `data/PROVENANCE.md` — unchanged NASA table, DOI, license, and source hash
 - `scripts/import-bass.py`, `checks/bass-data.cjs` — reproducible dataset import and integrity checks
-- `submission-copy.md` — draft submission fields and demo script
+- `submission-copy.md` — submission fields, public links and final credits
 - `nasa-case.js`, `data/B3-case-manifest.json` — real NASA B3 preset and source timestamps/hashes
 - `data/BASS-II_B3_ProofSheet.pdf`, `data/BASS-II_ReadMe.docx` — original NASA source documents
 - `scripts/build-nasa-case.py`, `checks/nasa-case.cjs`, `checks/browser.cjs` — reproducible case preparation and verification
@@ -154,10 +154,6 @@ NASA's Physical Sciences Informatics repository is the planned pathway for expan
 - Expand to a complementary PSI investigation with traceable metadata.
 - Broaden manual-import and failure-case browser coverage; core preset, export, and mission-preset checks now pass.
 
-## Submission checklist
+## Submission status
 
-- Add the team name and member names to the demo.
-- Host this folder on a public static host and verify that the URL opens without sign-in.
-- Record a demo of 30 seconds or less, or create a deck of no more than seven slides.
-- Add public demo and project URLs to the submission page.
-- Keep the NASA data citations and limitations visible in the project description.
+The public project, credited 26.79-second demo and [submission copy](submission-copy.md) are ready. The team still needs to verify participant eligibility, submit the required fields in its account and check the judging confirmation banner. Independent teammate review of the three clips remains optional.
