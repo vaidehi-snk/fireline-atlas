@@ -59,4 +59,4 @@ NASA/TM-20210011385, *Burning and Suppression of Solids—II (BASS-II)*, especia
 
 ## Demo opening credits
 
-MicroFire Tech · Vaidehi Kakad (team leader and presenter) · Niraj Khetre (team member). Both names appear in the opening captions and English synthetic narration. Runtime is 26.71 seconds.
+MicroFire Tech · Group members: Vaidehi Kakad and Niraj Khetre. Both names appear in the opening captions and English synthetic narration. Runtime is 26.79 seconds.
