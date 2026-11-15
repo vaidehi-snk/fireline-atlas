@@ -2,8 +2,6 @@
 
 [Open Fireline Atlas](https://vaidehi-snk.github.io/fireline-atlas/) · [Watch the narrated demo](https://vaidehi-snk.github.io/fireline-atlas/demo.html) · [Original-clip spot check](clip-spot-check.md)
 
-[Complete project handoff and continuation plan](PROJECT_CONTEXT.codex)
-
 **NASA Space Apps Challenge 2026 · Flame in Freefall**  
 An offline-ready, source-traceable evidence dashboard for microgravity fire-safety research.
 
@@ -165,7 +163,3 @@ NASA's Physical Sciences Informatics repository is the planned pathway for expan
 - Add cropping/masking for overlays and checks for camera movement.
 - Expand to a complementary PSI investigation with traceable metadata.
 - Broaden manual-import and failure-case browser coverage; core preset, export, and mission-preset checks now pass.
-
-## Submission status
-
-The public project, credited 26-second demo and [submission copy](submission-copy.md) are ready. The team still needs to verify participant eligibility, submit the required fields in its account and check the judging confirmation banner. Independent teammate review of the three clips remains optional.
