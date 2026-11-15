@@ -37,14 +37,23 @@ Mission Review compares a proposed environment with the available evidence acros
 
 ### Use of Super Intelligence (SI)
 
-**Checkboxes visible in your screenshot that match the documented work**
+**Select these seven options**
 
 - Ideation or Brainstorming
 - Research or Information Gathering
 - Data Analysis and Interpretation
 - Coding, Debugging, or Troubleshooting
+- Writing, Editing, or Translation
+- Visual Design or Image Creation
+- Presentation, Video, or Audio
 
-**Building SI/ML Into the Project:** The app uses deterministic retrieval, rules, image processing and template matching. No trained model or chatbot runs in the dashboard. Leave this unchecked if the portal means an embedded SI/ML model. Scroll through the remaining options and select any that describe the documented writing, demo production or narration work below. The screenshot cuts off the rest of the list.
+Visual Design applies to the dashboard layout, charts, and demo composition. NASA supplied the experimental imagery. Writing applies to the submission copy, script, and captions. Presentation applies to the edited demo and synthesized narration.
+
+**Leave unchecked for the documented implementation**
+
+- Building SI/ML Into the Project — the deployed dashboard uses explicit retrieval rules, numerical image processing, and template matching. SI assistance was used during development.
+- Other Project-Related SI Use — the seven selections cover the documented uses.
+- None / Did not use SI or SI tools — the team used SI in the selected categories.
 
 **Disclosure text** (use wherever the form offers a description):
 
