@@ -57,16 +57,6 @@ NASA/TM-20210011385, *Burning and Suppression of Solids—II (BASS-II)*, especia
 - NASA Technical Reports Server citation: https://ntrs.nasa.gov/citations/20210011385
 - NASA PSI repository: https://psi.nasa.gov/physci/repo
 
-## 30-second demo script
+## Demo opening credits
 
-**0:00–0:04** Show team/member names and project title. “Fireline Atlas turns NASA combustion data into inspectable mission evidence.”
-
-**0:04–0:11** Load **real NASA B3 case** and scrub frames. “We extract optical motion from real NASA images, preserving timestamps and showing processing sensitivity.”
-
-**0:11–0:19** Open the B3 source-record link, reset filters, and show censored values. “Each case links to experimental conditions across 129 tests. Missing and over-range readings stay explicit.”
-
-**0:19–0:26** Show the lunar transfer gaps and export. “For future habitats, Fireline identifies evidence gaps and exports traceable research briefs.”
-
-**0:26–0:30** Show sources and project URL. “Next: independent physical validation, supporting better fire-safety research.”
-
-Add team name and team members on screen or in the introduction. Use the demo only after the team and the project URL are finalized.
+MicroFire Tech · Vaidehi Kakad (team leader and presenter) · Niraj Khetre (team member). Both names appear in the opening captions and English synthetic narration. Runtime is 26.71 seconds.
