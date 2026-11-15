@@ -119,6 +119,18 @@ python scripts/video_outcomes.py fetch --pi Olson && python scripts/video_outcom
 
 Set `FIRELINE_CHROME` if Chrome is not at the script's default Windows path. The B3 default fit is approximately **4.804 px/s, 11/11 usable frames, R² ≈ 0.998**. This verifies pipeline behavior on reproduced NASA imagery; it is not error against independent reference boundaries or a validated physical spread rate. [Example exported measurements](data/B3-analysis-example.csv) retain timing and source settings.
 
+## How AI was used
+
+Space Apps asks teams to state where and how AI (SI) tools were used. In this project:
+
+- **Code:** the dashboard, the data importers and checks, and the flight-video pipeline (`scripts/video_outcomes.py`) were written with AI coding assistants. The team chose what to build, reviewed the code and ran the checks listed under Verification.
+- **Derived data:** `bass-data.js`, `nasa-case.js`, `video-data.js`, `data/video-index.json`, `data/video-traces/`, `data/video-outcomes.csv` and `data/overlay-glyphs.json` are produced by those AI-assisted scripts from NASA's files. The NASA source files in `data/` are kept unchanged.
+- **Research and writing:** AI assistants helped search NASA sources, brainstorm options and draft this README, the handoff and the submission text.
+- **Demo video:** the narration is an AI-generated voice (Fish Audio) and the edit was SI-assisted. The footage and data shown come from NASA and this project. The end card, the demo page and the MP4 metadata say so.
+- **Not in the app:** the deployed dashboard does not call an AI model. Its answers come from fixed rules you can inspect, and its measurements from numerical image processing.
+
+The same statement is in the page metadata (`<meta name="ai-disclosure">`), in `video-data.js` (`meta.ai_assistance`) and in [data provenance](data/PROVENANCE.md).
+
 ## Data and limits
 
 The included notes are paraphrases of the listed NASA sources, primarily NASA/TM-20210011385. They are not raw experiment records and are not a complete PSI dataset. In particular, the `≈100 W` and `≈110 W` comparison uses approximate values described in the report. It is a context comparison, not a calibrated chart, safety threshold, or predictive model. The scenario workbench reports condition similarity and missing evidence; its condition coverage is not a safety score. The rank score is retrieval relevance, not fire risk. This prototype does not replace NASA material qualification, engineering review, or crew procedures.
