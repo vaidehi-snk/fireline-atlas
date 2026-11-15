@@ -3,7 +3,7 @@
 [Open Fireline Atlas](https://vaidehi-snk.github.io/fireline-atlas/) · [Watch the narrated demo](https://vaidehi-snk.github.io/fireline-atlas/demo.html) · [Original-clip spot check](clip-spot-check.md)
 
 **NASA Space Apps Challenge 2026 · Flame in Freefall**  
-An offline-ready, source-traceable evidence dashboard for microgravity fire-safety research.
+We read NASA’s raw flight videos to find where the evidence stops. Fireline Atlas connects 65 measured flight clips to 129 BASS-II test records. Researchers can inspect the camera and radiometer signals behind an observation, then see how far the tested conditions extend toward a lunar habitat scenario.
 
 ## Project status
 
@@ -24,7 +24,7 @@ Built for [Flame in Freefall](https://www.spaceappschallenge.org/2026/challenges
 | --- | --- | --- |
 | **Flame Lab** | Extract image-boundary motion from a local image sequence | Overlays, motion graph, threshold sensitivity, measurements CSV |
 | **Mission Review** | Compare a hypothetical scenario and target habitat with curated evidence | Review note, exploratory study matrix, mission-transfer gap brief |
-| **NASA Evidence** | Inspect 129 original records, filter conditions, ask questions, and inspect sources | Descriptive plot, full source records, exports with provenance, ranked findings |
+| **NASA Evidence** | Select a test by oxygen and airflow, compare its camera and radiometer traces, and inspect the original record | Flight outcomes map, signal charts, full source records, exports with provenance, ranked findings |
 
 ## Run it
 
@@ -123,8 +123,8 @@ Space Apps asks teams to state where and how AI (SI) tools were used. In this pr
 
 - **Code:** the dashboard, the data importers and checks, and the flight-video pipeline (`scripts/video_outcomes.py`) were written with AI coding assistants. The team chose what to build, reviewed the code and ran the checks listed under Verification.
 - **Derived data:** `bass-data.js`, `nasa-case.js`, `video-data.js`, `data/video-index.json`, `data/video-traces/`, `data/video-outcomes.csv` and `data/overlay-glyphs.json` are produced by those AI-assisted scripts from NASA's files. The NASA source files in `data/` are kept unchanged.
-- **Research and writing:** AI assistants helped search NASA sources, brainstorm options and draft this README, the handoff and the submission text.
-- **Demo video:** the narration is an AI-generated voice (Fish Audio) and the edit was SI-assisted. The footage and data shown come from NASA and this project. The end card, the demo page and the MP4 metadata say so.
+- **Research and writing:** AI assistants helped search NASA sources, brainstorm options and draft the project documentation and submission text.
+- **Demo video:** MicroFire Tech’s 26.1-second film uses NASA BASS-II footage, Fireline Atlas data, and an AI-generated Fish Audio voice. The edit was SI-assisted. The demo page and MP4 metadata disclose the narration and editing assistance.
 - **Not in the app:** the deployed dashboard does not call an AI model. Its answers come from fixed rules you can inspect, and its measurements from numerical image processing.
 
 The same statement is in the page metadata (`<meta name="ai-disclosure">`), in `video-data.js` (`meta.ai_assistance`) and in [data provenance](data/PROVENANCE.md).
@@ -147,14 +147,14 @@ NASA's Physical Sciences Informatics repository is the planned pathway for expan
 - `bass-data.js`, `experiment-data.js`, `experiment-data.css` — original-record explorer and lossless data classification
 - `data/PSI-25_Experimental-table_BASS-II.csv`, `data/PROVENANCE.md` — unchanged NASA table, DOI, license, and source hash
 - `scripts/import-bass.py`, `checks/bass-data.cjs` — reproducible dataset import and integrity checks
-- `submission-copy.md` — submission fields, public links and final credits
+- `demo.html`, `fireline-demo.mp4` — public demo player and its downloadable film
 - `nasa-case.js`, `data/B3-case-manifest.json` — real NASA B3 preset and source timestamps/hashes
 - `data/BASS-II_B3_ProofSheet.pdf`, `data/BASS-II_ReadMe.docx` — original NASA source documents
 - `scripts/build-nasa-case.py`, `checks/nasa-case.cjs`, `checks/browser.cjs` — reproducible case preparation and verification
 - `scripts/video_outcomes.py`, `checks/video_outcomes_check.py` — flight-video index, download, measurement and outcomes, with checks
 - `data/video-index.json`, `data/video-traces/`, `data/video-outcomes.csv`, `data/overlay-glyphs.json` — derived video data and overlay templates
 - `video-data.js`, `video-outcomes.js` — generated browser bundle and the Flight video panel
-- `PROJECT_CONTEXT.codex` — complete, tracked project handoff and continuation plan
+- `outcome-map.js` — oxygen–airflow plot with test selection and the lunar scenario reference
 
 ## Next technical milestones
 
