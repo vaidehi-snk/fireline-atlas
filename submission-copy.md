@@ -1,62 +1,85 @@
-# Submission copy — Fireline Atlas
+# Fireline Atlas — Space Apps submission copy
 
-## Project name
+Team: MicroFire Tech
+Group members: Vaidehi Kakad and Niraj Khetre
+
+Use the headings below to find each portal field. Copy the paragraphs or URLs beneath them. The SI checkbox notes and final team note are instructions for the team.
+
+## Project Summary
+
+### Project Name
 
 Fireline Atlas
 
-## High-level project summary
+### Summary
 
-What can a space-station flame tell us about a lunar habitat? Fireline Atlas connects 129 NASA BASS-II test records with optical and radiometer measurements from 65 flight clips. Users can inspect a flame frame by frame and explore 25 tests with recorded oxygen and airflow coordinates. The highest recorded initial oxygen was 22.2%. The challenge’s 30% lunar scenario sits beyond that evidence.
+How much can a flame aboard the International Space Station tell us about fire in a Moon base? Fireline Atlas connects 129 NASA BASS-II experiment records with measurements from 65 flight videos. A researcher can select a test, see when its flame signal faded, and check whether the radiometer reading also dropped. An interactive map plots the 25 tests with a single recorded oxygen and airflow value. It also reveals a gap: the highest initial oxygen in the full table was 22.2%, while the challenge’s lunar scenario starts at 30%. By tracing each observation back to its source and showing where the evidence runs out, Fireline helps researchers decide what to test next.
 
-## Link to project demo
+### Project Demo
 
 https://vaidehi-snk.github.io/fireline-atlas/demo.html
 
-## Link to final project
+### Project
 
 https://vaidehi-snk.github.io/fireline-atlas/
 
-## Detailed project description
+## Project Information
 
-Fireline joins 65 flight-video traces to NASA’s original BASS-II table. The dashboard measures periods of sustained visible signal and checks for a nearby drop in the digitized radiometer reading. Researchers can inspect the signal chart, trace an observation to the NASA filename and hash, and explore initial oxygen against recorded airflow for 25 tests with single-valued coordinates. The map shows 12 apparent losses with a nearby radiometer drop, two signals still visible near observation end, six inconclusive cases and five tests without video measurements. The lunar oxygen marker highlights a gap in the plotted evidence.
+### Project Details
 
-Fireline now incorporates the original NASA PSI-25 BASS-II experimental table: 129 records, six investigators, and 17 preserved source fields, attributed to DOI 10.60555/4qc4-de67. Users can filter tests, inspect initial oxygen versus exact numeric final CO, open the full record, and export selected rows with source provenance and file hash. Censored, status, and missing CO readings remain distinct. The recorded initial oxygen envelope is 13.6–22.2%, refining the report overview; coverage across heterogeneous tests does not establish matched conditions, causation, peak CO, or a safety threshold. This is real experiment-table ingestion; image-sequence accuracy validation remains a separate unfinished milestone.
+Start in NASA Evidence and select B1 on the oxygen–airflow map. The camera shows a bright signal that fades near 38 seconds. The radiometer falls below our comparison level at 39.75 seconds. A researcher can inspect both traces, read NASA’s original test settings and identify the source clip. This turns a table of experimental setups into a way to investigate what happened during individual tests.
 
-Fireline's technical centerpiece is the offline Flame Motion Lab. Load eleven real NASA B3 contact-sheet frames with their unequal source timestamps, or import a local sequence. Select an analysis band and threshold, extract image-boundary motion with a least-squares fit, and inspect overlays and threshold sensitivity. Exports retain source clocks, timing mode, settings and hashes. The B3 case links directly to its original experiment-table record. The method is inspired by NASA's BASS-II report, §2.2.4, but remains an independent implementation awaiting physical calibration and independent boundary annotations. Contact-sheet resolution and changing exposure are explicit limitations. A separate synthetic demo is also available and labeled. Fifteen browser checks passed on the public app. A separate qualitative spot check compared sampled frames from three original clips with the detector output. In B7, illuminated hardware and faint late signals complicate the interpretation of detected duration. Independent human annotations remain future work.
+We used Python, NumPy and FFmpeg to process NASA flight footage. The pipeline samples four frames per second, measures changes in image brightness and reads instrument digits from the video overlay. It compares the last sustained optical detection with a measured drop in the radiometer. Across 65 clips, 24 show both signals changing close together, five show a visible signal near the end of observation, and 36 remain inconclusive. Igniter glow, work lights and faint flames can affect the optical measurement. A missing sensor reading leaves the comparison unresolved.
 
-Spacecraft fires unfold in a low-gravity environment where buoyancy-driven flow changes. Research results are valuable, but a mission team still needs to connect a finding to the conditions under which it was measured. Fireline Atlas presents a focused, interactive evidence desk for that task.
+The browser interface uses HTML, CSS and JavaScript. Flame Lab lets users step through 11 NASA B3 images, track an image boundary using the original photo timestamps, vary the brightness threshold and export the results. NASA Evidence preserves all 17 fields from the original table. Tests with changing or ambiguous airflow stay in the table. Only tests with a single numeric reading on both axes appear on the map. The Moon base scenario appears as a vertical oxygen line because its airflow is unspecified.
 
-Users can ask about oxygen, heat release, fuel geometry, airflow, smoke, or crew monitoring; switch among habitat, suppression, and material-screening lenses; and filter the returned evidence. Fireline ranks each note by transparent topic matching, source tier, and mission relevance. Every result links to a NASA source, states its evidence type, and carries a bounded operational implication.
+Mission Review compares a proposed environment with the available evidence across oxygen, pressure, gravity and fuel type. It gives researchers source-linked questions and an exportable experimental plan. We designed the dashboard to make disagreements and missing measurements visible, so a researcher can tell which conclusions need another experiment. Fifteen browser checks passed on the public app. A separate visual spot check used sampled frames from three original NASA clips. Independent validation of physical burn duration and spread rate remains open.
 
-The mission scenario workbench turns this library into a usable planning interaction. A user selects fuel geometry, initial oxygen, burn duration, qualitative flow, a heat path to nearby hardware, and observed gas channels. The tool checks whether oxygen and configuration overlap the curated BASS-II evidence, detects the documented prolonged opposed-thick-slab damage analogue, identifies missing measurements, and generates scenario-specific review prompts. Its distinctive experiment planner ranks the next evidence gap for the chosen scenario, then exports a controlled, one-factor-at-a-time study matrix as CSV. NASA-reported context is labeled separately from proposed exploratory design levels; the matrix calls for measured flow and synchronized atmosphere channels. A one-click export also creates a source-linked plain-text mission review note. Outputs are evidence coverage and research-planning aids, not risk scores, fire predictions, or crew instructions.
+### Use of Super Intelligence (SI)
 
-The Mission Transfer Gap Map makes the lunar design challenge explicit. Set oxygen, pressure, gravity, and combustion family to compare a target habitat with the curated BASS-II evidence context. For the challenge's lunar reference (30% or greater oxygen, 10.2 psi or less, partial gravity), the map shows which axes are outside or absent from the curated notes and exports a mission-specific research-gap brief. It does not interpolate across gravity or pressure and does not infer safety. It distinguishes solid-fuel BASS-II evidence from gaseous-flame CFI-G context.
+**Checkboxes visible in your screenshot that match the documented work**
 
-The dashboard compares two approximate BASS-II cases reported by NASA: a prolonged opposed thick-slab burn near 100 W that damaged a window corner after a leak directed heat there, and a relatively brief concurrent-rod burn near 110 W that did not cause damage. The comparison is designed to challenge single-number reasoning, not to infer a safe threshold. The project also surfaces NASA findings about oxygen concentration, duct-flow scatter, geometry-dependent combustion products, and atmosphere measurements.
+- Ideation or Brainstorming
+- Research or Information Gathering
+- Data Analysis and Interpretation
+- Coding, Debugging, or Troubleshooting
 
-The prototype runs locally in a browser with no API key or sign-in. Its current evidence library is a small, curated set of paraphrased NASA findings rather than a complete PSI data ingestion. It is a research-navigation and decision-support concept, not a fire-growth predictor, material certification tool, or substitute for crew procedures.
+**Building SI/ML Into the Project:** The app uses deterministic retrieval, rules, image processing and template matching. No trained model or chatbot runs in the dashboard. Leave this unchecked if the portal means an embedded SI/ML model. Scroll through the remaining options and select any that describe the documented writing, demo production or narration work below. The screenshot cuts off the rest of the list.
 
-## Use of Super Intelligence (SI)
+**Disclosure text** (use wherever the form offers a description):
 
-Fireline uses an inspectable, local evidence-synthesis engine. It expands mission questions with combustion-science synonyms, ranks source-linked evidence using topic match, NASA source tier, and selected mission context, then generates a concise synthesis from those ranked findings. The user can inspect the evidence and limitations behind the answer. This prototype does not claim a general-purpose language model or validated predictive intelligence; its SI workflow is deliberately transparent and works without an external service. A future version can add a validated language model while retaining source-grounded retrieval, citation checks, and human review.
+We used OpenAI Codex to help develop the project idea, investigate NASA sources, write and debug code, review derived measurements, design regression checks, and prepare the submission text and demo. The demo uses actual NASA imagery and screenshots of the working application. Its editing, script and captions were SI-assisted. The English narration was synthesized with Microsoft’s Windows speech engine. NASA supplied the original experiment records and footage. Fireline’s code produced the optical measurements and classifications from those sources. In the dashboard, questions are matched to curated NASA findings through explicit rules that users can inspect.
 
-## NASA data
+### NASA Data
 
-NASA PSI-25 BASS-II flight videos (main camera clips), DOI https://doi.org/10.60555/4qc4-de67, listed and downloaded through the public PSI repository API. Fireline stores derived per-frame traces and per-test outcomes with the source file name, version and SHA-256; the demo shows selected B1 frames.
+Choose **Add New Link** for each row. The PSI-25 collection contains the experimental table, primary flight videos, B3 photographic proof sheet and instrument readme.
 
-NASA PSI-25 B3 contact sheet, original file `PSI-25_Raw Data_GMT2014_050_BASS_S148M_TPB3_ProofSheet.pdf`, and BASS-II readme, under the same source DOI. The repository includes unchanged source documents, a reproducible thumbnail reconstruction script, and a manifest with photo clocks and image hashes. The built-in case uses 11 unresized 314×209 thumbnails over a 21-second source-time span. No spatial calibration or independent published boundary annotation is claimed.
+| Link Text | Link Url |
+| --- | --- |
+| NASA PSI-25 — BASS-II experiment records, flight videos, B3 images and instrument notes | https://doi.org/10.60555/4qc4-de67 |
+| NASA Technical Memorandum — Burning and Suppression of Solids–II (BASS-II), including the image-analysis method in section 2.2.4 | https://ntrs.nasa.gov/citations/20210011385 |
+| NASA Glenn Research Center — Combustion Science | https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/ |
+| NASA Physical Sciences Informatics — Investigations by Research Area | https://www.nasa.gov/physical-sciences-informatics-psi/psi-investigations-by-research-area/ |
+| NASA Space Apps — Flame in Freefall challenge and lunar scenario | https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/ |
 
-NASA PSI-25, BASS-II experimental table, DOI https://doi.org/10.60555/4qc4-de67. Original file `PSI-25_Experimental table_BASS-II.csv`, file version 1, CC0-1.0, retrieved 2026-11-14. A byte-preserving CSV and its SHA-256 are included with a reproducible importer and data-quality checks. See `data/PROVENANCE.md` for the source trail.
+### Space Agency Partner & Other Data
 
-NASA/TM-20210011385, *Burning and Suppression of Solids—II (BASS-II)*, especially the summary findings on heat-release rate, oxygen concentration, duct-flow variation, test geometry, and combustion-product sensing. NASA Physical Sciences Informatics (PSI) is identified as the pathway for expanding this curated evidence set with investigation-level raw and analyzed data.
+The science data came from NASA. Use these rows for the project's public code and external development, processing and presentation tools.
 
-## Space agency partner data and other references
+| Link Text | Link Url |
+| --- | --- |
+| MicroFire Tech — Fireline Atlas source code, processing scripts and provenance | https://github.com/vaidehi-snk/fireline-atlas |
+| OpenAI Codex — SI-assisted development and submission preparation | https://openai.com/codex/ |
+| Python — data preparation and video analysis | https://www.python.org/ |
+| NumPy — numerical analysis | https://numpy.org/ |
+| FFmpeg — video decoding and demo encoding | https://ffmpeg.org/ |
+| pypdf — extracting source images from the NASA proof sheet | https://pypdf.readthedocs.io/ |
+| Pillow — image reconstruction, captions and demo frames | https://python-pillow.org/ |
+| PyAV — decoding selected NASA video frames for the demo and spot checks | https://pyav.org/ |
+| Microsoft System.Speech — synthesized English narration | https://learn.microsoft.com/en-us/dotnet/api/system.speech.synthesis.speechsynthesizer |
+| Playwright — automated browser checks | https://playwright.dev/ |
+| GitHub Pages — public project and demo hosting | https://pages.github.com/ |
 
-- NASA Glenn Research Center, Combustion Science overview: https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/
-- NASA PSI investigations by research area: https://www.nasa.gov/physical-sciences-informatics-psi/psi-investigations-by-research-area/
-- NASA Technical Reports Server citation: https://ntrs.nasa.gov/citations/20210011385
-- NASA PSI repository: https://psi.nasa.gov/physci/repo
+## Team note before submission
 
-## Demo opening credits
-
-MicroFire Tech · Group members: Vaidehi Kakad and Niraj Khetre. Both names appear in the opening captions and English synthetic narration. Runtime is 26.79 seconds.
+The screenshot asks for visible watermarks on SI-generated visuals and descriptive text and metadata for SI-generated audio, code and data. The current MP4 contains synthetic narration, and its inspected container and audio tags have no SI disclosure. Add the narration disclosure to the public demo description and media metadata. Identify the SI-assisted demo production on screen while keeping the NASA imagery credited as NASA source material. Record SI assistance for code and derived data in public descriptive text and metadata. These artifact updates are pending. Editing this copy alone does not add those disclosures to the published files.
