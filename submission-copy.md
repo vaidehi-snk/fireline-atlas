@@ -57,7 +57,7 @@ Visual Design applies to the dashboard layout, charts, and demo composition. NAS
 
 **Disclosure text** (use wherever the form offers a description):
 
-We used OpenAI Codex to help develop the project idea, investigate NASA sources, write and debug code, review derived measurements, design regression checks, and prepare the submission text and demo. The demo uses actual NASA imagery and screenshots of the working application. Its editing, script and captions were SI-assisted. The English narration was synthesized with Microsoft’s Windows speech engine. NASA supplied the original experiment records and footage. Fireline’s code produced the optical measurements and classifications from those sources. In the dashboard, questions are matched to curated NASA findings through explicit rules that users can inspect.
+We used OpenAI Codex to help develop the project idea, investigate NASA sources, write and debug code, review derived measurements, design regression checks, and prepare the submission text and demo. The demo uses actual NASA imagery and screenshots of the working application. Its editing, script and captions were SI-assisted. The English narration is an AI-generated voice from Fish Audio; the end card, the demo page and the MP4 metadata say so. NASA supplied the original experiment records and footage. Fireline’s code produced the optical measurements and classifications from those sources. In the dashboard, questions are matched to curated NASA findings through explicit rules that users can inspect.
 
 ### NASA Data
 
@@ -85,10 +85,11 @@ The science data came from NASA. Use these rows for the project's public code an
 | pypdf — extracting source images from the NASA proof sheet | https://pypdf.readthedocs.io/ |
 | Pillow — image reconstruction, captions and demo frames | https://python-pillow.org/ |
 | PyAV — decoding selected NASA video frames for the demo and spot checks | https://pyav.org/ |
-| Microsoft System.Speech — synthesized English narration | https://learn.microsoft.com/en-us/dotnet/api/system.speech.synthesis.speechsynthesizer |
+| Fish Audio — AI-generated English narration for the demo | https://fish.audio/ |
+| HyperFrames — demo video composition and rendering | https://hyperframes.heygen.com/ |
 | Playwright — automated browser checks | https://playwright.dev/ |
 | GitHub Pages — public project and demo hosting | https://pages.github.com/ |
 
 ## Team note before submission
 
-The screenshot asks for visible watermarks on SI-generated visuals and descriptive text and metadata for SI-generated audio, code and data. The current MP4 contains synthetic narration, and its inspected container and audio tags have no SI disclosure. Add the narration disclosure to the public demo description and media metadata. Identify the SI-assisted demo production on screen while keeping the NASA imagery credited as NASA source material. Record SI assistance for code and derived data in public descriptive text and metadata. These artifact updates are pending. Editing this copy alone does not add those disclosures to the published files.
+The screenshot asks for visible watermarks on SI-generated visuals and descriptive text and metadata for SI-generated audio, code and data. The demo MP4 (26.0 s) now discloses its AI narration and SI-assisted edit in three places: the end card on screen ("AI voice by Fish Audio · SI-assisted edit"), the demo page text under the video, and the MP4 title, comment and description tags. Its visuals are NASA PSI-25 footage and Fireline data drawn as motion graphics, not generated images. Record SI assistance for code and derived data in public descriptive text where the form asks for it.
